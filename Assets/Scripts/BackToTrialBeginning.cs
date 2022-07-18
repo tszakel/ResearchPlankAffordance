@@ -28,7 +28,10 @@ public class BackToTrialBeginning : MonoBehaviour
         tempPos.y = startPositionY ;
         tempPos.z = startPositionZ;
         transform.position = tempPos;*/
+        Debug.Log("Method called. Current position " + this.transform.position);
+
         this.transform.position = startPos;
+        Debug.Log("position after change: " + this.transform.position);
 
     }
 }

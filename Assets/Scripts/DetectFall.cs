@@ -21,7 +21,7 @@ public class DetectFall : MonoBehaviour
     public static bool hasFallen;
     public static bool successfulTrial;
 
-    private float bodyWiggleRoom = 2.0f;
+    private float bodyWiggleRoom = 0.8f;
 
     public float HMDTracker;
     private float lateralDifference = 0.0f;
@@ -61,7 +61,7 @@ public class DetectFall : MonoBehaviour
     void Update()
     {
         
-        lateralDifference = Mathf.Abs(HMDTracker - VRCamera.transform.position.z);
+        lateralDifference = Mathf.Abs((HMDTracker - VRCamera.transform.position.x));
         if (lateralDifference > PlankChange.plankExtent)
         {
             Fallen();
@@ -111,10 +111,10 @@ public class DetectFall : MonoBehaviour
     }
     
     void Fallen() {
-        VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-        VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
-        City.SetActive(false);
-        this.gameObject.SetActive(false);
+        //VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+        //VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
+        //City.SetActive(false);
+        //this.gameObject.SetActive(false);
 
         hasFallen = true;
     }
