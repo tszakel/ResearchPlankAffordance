@@ -86,20 +86,20 @@ public class DetectFall : MonoBehaviour
 
     }
 
-    private void MonitorFeet(float rightFoot, float leftFoot)
-    {
-        if((checkWithinBounds(rightFoot) == false && checkWithinBounds(leftFoot)) == false){
-            Fallen();
-        }
-    }
+    // private void MonitorFeet(float rightFoot, float leftFoot)
+    // {
+    //     if((checkWithinBounds(rightFoot) == false && checkWithinBounds(leftFoot)) == false){
+    //         Fallen();
+    //     }
+    // }
     
-    bool checkWithinBounds(float foot) {
-        if (foot <= plankRightBound && foot >= plankLeftBound) {
-            Debug.Log("you're within bounds");
-            return true;
-        }
-        return false;
-    }
+    // bool checkWithinBounds(float foot) {
+    //     if (foot <= plankRightBound && foot >= plankLeftBound) {
+    //         Debug.Log("you're within bounds");
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     void monitorSuccessfulTrial(float userCenter) {
         if(userCenter <= plankEnd){

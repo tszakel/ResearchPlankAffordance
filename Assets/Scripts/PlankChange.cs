@@ -19,14 +19,19 @@ public class PlankChange : MonoBehaviour
     private int trialNumber = 1;
     public static float plankExtent;
     
-    public GameObject VRCamera,City;
+    public GameObject VRCamera,City,User;
 
-    public BackToTrialBeginning resetTrialScript;
+    Vector3 startPos;
+
+    //public BackToTrialBeginning resetTrialScript;
     
     
     // Start is called before the first frame update
     void Start()
     {
+        startPos = User.transform.position;
+        Debug.Log("Start Position: " + startPos);
+
         temp = transform.localScale;
         temp.x = maxPlankWidth;
         transform.localScale = temp;
@@ -46,8 +51,10 @@ public class PlankChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
-            resetTrialScript.resetTrial();
+        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("g")){
+            Debug.Log("Trigger or 'G' has been pressed");
+            User.transform.position = new Vector3(0,20,0);
+            //resetTrialScript.resetTrial();
         }
 
         //change getKeyDown to space
@@ -119,7 +126,7 @@ public class PlankChange : MonoBehaviour
             City.SetActive(true);
             this.gameObject.SetActive(true);
 
-            resetTrialScript.resetTrial();
+            //resetTrialScript.resetTrial();
 
             DetectFall.hasFallen = false;
         }    

@@ -14,6 +14,7 @@ public class BackToTrialBeginning : MonoBehaviour
     void Start()
     { 
         startPos = this.transform.position;
+        Debug.Log("Start Position: " + startPos);
         /*startPositionX = transform.position.x;
         startPositionY = transform.position.y;
         startPositionZ = transform.position.z;*/
