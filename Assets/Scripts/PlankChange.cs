@@ -23,12 +23,18 @@ public class PlankChange : MonoBehaviour
 
     Vector3 startPos;
 
-    //public BackToTrialBeginning resetTrialScript;
+    public Renderer rend;
+    private DetectFall DetectFallScript;
     
     
     // Start is called before the first frame update
     void Start()
     {
+        rend = GetComponent<Renderer>();
+        rend.enabled = true;
+
+        DetectFallScript = GetComponent<DetectFall>();
+
         startPos = User.transform.position;
         Debug.Log("Start Position: " + startPos);
 
@@ -51,95 +57,115 @@ public class PlankChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("t")){
-           
-            User.transform.position = new Vector3(0,40,0); 
-            Debug.Log("Transported Up: " + User.transform.position);
-            //resetTrialScript.resetTrial();
+
+        if(Input.GetKeyDown("d")){
+            Debug.Log("Script Disabled");
+            DetectFallScript.enabled = false;
         }
 
-        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("b")){
-            User.transform.position = startPos;
-            Debug.Log("Transported To Start: " + User.transform.position);
-            //resetTrialScript.resetTrial();
+        if(Input.GetKeyDown("e")){
+            Debug.Log("Script Enabled");
+            DetectFallScript.enabled = true;
         }
 
-        //change getKeyDown to space
-        if (Input.GetKeyDown("s") && trialNumber <= 10) {
-            prepNextTrials();
-            // assignNewPlankWidth(trialPlankWidths);
-            // temp = transform.localScale;
-            // temp.x = curPlankWidth;
-            // transform.localScale = temp; //while change skybox = false
-            // VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-            // City.SetActive(true);
-            // this.gameObject.SetActive(true);
+        // //change getKeyDown to space
+        // if (Input.GetKeyDown("s") && trialNumber <= 10) {
 
-            // ++trialNumber;
-        }
+        // }
         
-        if (DetectFall.successfulTrial && trialNumber <= 10) {
-            prepNextTrials();
-            // assignNewPlankWidth(trialPlankWidths);
-            // temp = transform.localScale;
-            // temp.x = curPlankWidth;
-            // transform.localScale = temp;
-            // ++trialNumber;
-            // VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-            // City.SetActive(true);
-            // this.gameObject.SetActive(true);
-
-
-
-            // DetectFall.successfulTrial = false;
-
-        }
+        // if (DetectFall.successfulTrial && trialNumber <= 10) {
+ 
+        // }
         
         if (DetectFall.hasFallen && trialNumber <= 10) {
-            prepNextTrials();
-            // Debug.Log("you have fallen");
-
-            // assignNewPlankWidth(trialPlankWidths);
-            // temp = transform.localScale;
-            // temp.x = curPlankWidth;
-            // transform.localScale = temp;
-            // ++trialNumber;
-            
-            // VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-            // City.SetActive(true);
-            // this.gameObject.SetActive(true);
-
-
-            // resetTrialScript.resetTrial();
-
-            // DetectFall.hasFallen = false;
+            Debug.Log("if statement reached");
+            StartCoroutine(prepNextTrials());
         }
+
+        //     assignNewPlankWidth(trialPlankWidths);
+        //     temp = transform.localScale;
+        //     temp.x = curPlankWidth;
+        //     transform.localScale = temp;
+        //     ++trialNumber;
+
+        //     WaitUntil(SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
+
+        //     }
+        //         Debug.Log("Loop reached");
+
         
+        //             Debug.Log("Trigger Pressed. Reactivating Scene");
+
+        //             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+        //             City.SetActive(true);
+        //             rend.enabled = true;
+
+        //             User.transform.position = startPos;
+
+        //             DetectFall.hasFallen = false;
+        //             readyToProceed = true;
+        //         }else{
+        //             continue;
+        //         }
+        //     }   
+        // }
+
         
         if (trialNumber >= 11) {
             SetUpGroundTrials();
         }
     }
 
-    private void prepNextTrials(){
+    // private void prepNextTrials(){
+    //     Debug.Log("Method reached");
+
+    //     assignNewPlankWidth(trialPlankWidths);
+    //     temp = transform.localScale;
+    //     temp.x = curPlankWidth;
+    //     transform.localScale = temp;
+    //     ++trialNumber;
+    IEnumerator prepNextTrials()
+    {
+        Debug.Log("Waiting for user...");
+        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any));
+        Debug.Log("Trigger Pressed. Reactivating Scene");
+
         assignNewPlankWidth(trialPlankWidths);
         temp = transform.localScale;
         temp.x = curPlankWidth;
         transform.localScale = temp;
         ++trialNumber;
 
-        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
-            VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-            City.SetActive(true);
-            this.gameObject.SetActive(true);
-            User.transform.position = startPos;
+        VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+        City.SetActive(true);
+        rend.enabled = true;
 
-            //resetTrialScript.resetTrial();
-
-            DetectFall.hasFallen = false;
-        }    
+        Debug.Log("Script Enabled");
+        DetectFallScript.enabled = true;
         
+        Debug.Log("User is ready!");
     }
+
+    //     while (readyToProceed == false){
+    //         Debug.Log("Loop reached");
+
+    //         if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
+    //             Debug.Log("Trigger Pressed");
+    //             readyToProceed = true;
+    //             continue;
+    //         }
+    //         Debug.Log("Body of code reached");
+
+    //         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+    //         City.SetActive(true);
+    //         rend.enabled = true;
+
+    //         User.transform.position = startPos;
+
+    //         DetectFall.hasFallen = false;
+    //     }    
+        
+    // }
 
     private void assignNewPlankWidth(List<float> list)
     {

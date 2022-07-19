@@ -13,10 +13,12 @@ public class MenuController : MonoBehaviour
             LoadNextScene();
         }
     }
+
     public void LoadNextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+    
     public void QuitGame()
     {
         Debug.Log("Game terminated");

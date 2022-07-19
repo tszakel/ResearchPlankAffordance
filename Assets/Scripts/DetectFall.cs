@@ -29,10 +29,19 @@ public class DetectFall : MonoBehaviour
     private float lateralDifference = 0.0f;
 
     public GameObject VRCamera,City; 
+    Vector3 startPos;
+
+    public Renderer rend;
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        rend = GetComponent<Renderer>();
+        rend.enabled = true;
+        
+        // startPos = VRCamera.transform.position;
+        // Debug.Log("Start Position: " + startPos);
         HMDTracker = VRCamera.transform.position.z;
         //Debug.Log(HMDTracker);
         /*plankLeftBound = GetComponent<Renderer>().bounds.min.z;
@@ -67,10 +76,27 @@ public class DetectFall : MonoBehaviour
         if (lateralDifference > PlankChange.plankExtent)
         {
             Fallen();
-            Debug.Log("lateralDif: " + lateralDifference + " extent: " + PlankChange.plankExtent);
-            Debug.Log("you have fallen");
+            // Debug.Log("lateralDif: " + lateralDifference + " extent: " + PlankChange.plankExtent);
+            // Debug.Log("you have fallen " + hasFallen);
+
         }
-        //Debug.Log(lateralDifference);
+
+        // if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
+        //     Debug.Log("trig");
+        //     VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+        //     City.SetActive(true);
+        //     rend.enabled = true;
+        // }
+
+        // if (SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any)){
+        //     Debug.Log("grip");
+
+        //     VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+        //     VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
+        //     City.SetActive(false);
+        //     rend.enabled = false;
+        // }
+        // //Debug.Log(lateralDifference);
         /*plankLeftBound = GetComponent<Renderer>().bounds.min.z;
         plankRightBound = GetComponent<Renderer>().bounds.max.z;
         plankEnd = GetComponent<Renderer>().bounds.min.x;
@@ -116,7 +142,7 @@ public class DetectFall : MonoBehaviour
         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
         VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
         City.SetActive(false);
-        this.gameObject.SetActive(false);
+        rend.enabled = false;
 
         hasFallen = true;
     }
