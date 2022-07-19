@@ -4,7 +4,6 @@ using RootMotion.FinalIK;
 using Valve.VR;
 
 // This part is for XR Origin
-using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace RootMotion.Demos
@@ -33,17 +32,22 @@ namespace RootMotion.Demos
         public InputHelpers.Button TriggerActivationButton;
         public float activationThresold = 0.1f;
         public XRController LeftController, RightController;
-        private bool Controller_Activated;
+        private bool leftControllerActivated, rightControllerActivated, Controller_Activated;
+
+        private void Update()
+        {
+            // This part is for XR Origin
+            leftControllerActivated = CheckIfActivated(LeftController);
+            rightControllerActivated = CheckIfActivated(RightController);
+
+            if (leftControllerActivated == true || rightControllerActivated == true)
+                Controller_Activated = true;
+            else
+                Controller_Activated = false;
+        }
 
         void LateUpdate()
         {
-            // This part is for XR Origin
-            bool x = CheckIfActivated(LeftController);
-            bool y = CheckIfActivated(RightController);
-
-            if (x == true || y == true)
-                Controller_Activated = true;
-
             //if (Input.GetKeyDown(KeyCode.C) || SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)) // This is for SteamVR Interaction system
             if (Input.GetKeyDown(KeyCode.C) || Controller_Activated == true) // This is for Unity's XR Interaction System
             {
