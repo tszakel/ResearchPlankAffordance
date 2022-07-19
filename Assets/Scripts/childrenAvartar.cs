@@ -79,8 +79,8 @@ public class childrenAvartar : MonoBehaviour
             GameObject[] tracker_array = new GameObject[] { Tracker1, Tracker2, Tracker3, Tracker4, Tracker5 };
             tracker_array = tracker_array.OrderByDescending(v => Mathf.Round((v.transform.position.y) * 10f) / 10f).ToArray<GameObject>();
 
-            //GameObject a = GameObject.Find("[CameraRig]/Camera"); // This is for SteamVR Interaction System
-            GameObject a = GameObject.Find("XR Origin/Camera Offset/Main Camera"); // This is for Unity's XR Interaction System
+            GameObject a = GameObject.Find("[CameraRig]/Camera"); // This is for SteamVR Interaction System
+            //GameObject a = GameObject.Find("XR Origin/Camera Offset/Main Camera"); // This is for Unity's XR Interaction System
             a.transform.rotation = Quaternion.Euler(0, a.transform.rotation.eulerAngles.y, 0);
             Quaternion main_rotation = a.transform.rotation;
             Vector3 main_position = new Vector3(a.transform.position.x, 0, a.transform.position.z);
@@ -287,8 +287,8 @@ public class childrenAvartar : MonoBehaviour
         else if (count == 5)
         {
             if (head_Target == null)
-                //head_Target = GameObject.Find("[CameraRig]/Camera/Head Target");
-                head_Target = GameObject.Find("XR Origin/Camera Offset/Main Camera/Head Target");
+                head_Target = GameObject.Find("[CameraRig]/Camera/Head Target");
+                //head_Target = GameObject.Find("XR Origin/Camera Offset/Main Camera/Head Target");
 
             if (pelvis_Target == null)
                 pelvis_Target = GameObject.Find("Trackers/Pelvis Tracker/Pelvis Target");

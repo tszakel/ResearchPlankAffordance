@@ -4,7 +4,7 @@ using RootMotion.FinalIK;
 using Valve.VR;
 
 // This part is for XR Origin
-using UnityEngine.XR.Interaction.Toolkit;
+//using UnityEngine.XR.Interaction.Toolkit;
 
 namespace RootMotion.Demos
 {
@@ -29,27 +29,27 @@ namespace RootMotion.Demos
         private int count = 0;
 
         // This part is for XR Origin
-        public InputHelpers.Button TriggerActivationButton;
-        public float activationThresold = 0.1f;
-        public XRController LeftController, RightController;
-        private bool leftControllerActivated, rightControllerActivated, Controller_Activated;
+        //public InputHelpers.Button TriggerActivationButton;
+        //public float activationThresold = 0.1f;
+        //public XRController LeftController, RightController;
+        //private bool leftControllerActivated, rightControllerActivated, Controller_Activated;
 
-        private void Update()
-        {
-            // This part is for XR Origin
-            leftControllerActivated = CheckIfActivated(LeftController);
-            rightControllerActivated = CheckIfActivated(RightController);
+        //private void Update()
+        //{
+        //    // This part is for XR Origin
+        //    leftControllerActivated = CheckIfActivated(LeftController);
+        //    rightControllerActivated = CheckIfActivated(RightController);
 
-            if (leftControllerActivated == true || rightControllerActivated == true)
-                Controller_Activated = true;
-            else
-                Controller_Activated = false;
-        }
+        //    if (leftControllerActivated == true || rightControllerActivated == true)
+        //        Controller_Activated = true;
+        //    else
+        //        Controller_Activated = false;
+        //}
 
         void LateUpdate()
         {
-            //if (Input.GetKeyDown(KeyCode.C) || SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)) // This is for SteamVR Interaction system
-            if (Input.GetKeyDown(KeyCode.C) || Controller_Activated == true) // This is for Unity's XR Interaction System
+            if (Input.GetKeyDown(KeyCode.C) || SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)) // This is for SteamVR Interaction system
+            //if (Input.GetKeyDown(KeyCode.C) || Controller_Activated == true) // This is for Unity's XR Interaction System
             {
                 if (count == 0)
                 {
@@ -91,11 +91,11 @@ namespace RootMotion.Demos
         }
 
         // This part is for XR ORigin
-        public bool CheckIfActivated(XRController controller)
-        {
-            InputHelpers.IsPressed(controller.inputDevice, TriggerActivationButton, out bool isActivated, activationThresold);
-            return isActivated;
-        }
+        //public bool CheckIfActivated(XRController controller)
+        //{
+        //    InputHelpers.IsPressed(controller.inputDevice, TriggerActivationButton, out bool isActivated, activationThresold);
+        //    return isActivated;
+        //}
 
     }
 }
