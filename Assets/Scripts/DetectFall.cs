@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
+using Valve.VR;
+
 
 public class DetectFall : MonoBehaviour
 {
@@ -21,7 +23,7 @@ public class DetectFall : MonoBehaviour
     public static bool hasFallen;
     public static bool successfulTrial;
 
-    private float bodyWiggleRoom = 0.8f;
+    //private float bodyWiggleRoom = 0.8f;
 
     public float HMDTracker;
     private float lateralDifference = 0.0f;
@@ -111,10 +113,10 @@ public class DetectFall : MonoBehaviour
     }
     
     void Fallen() {
-        //VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-        //VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
-        //City.SetActive(false);
-        //this.gameObject.SetActive(false);
+        VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+        VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
+        City.SetActive(false);
+        this.gameObject.SetActive(false);
 
         hasFallen = true;
     }

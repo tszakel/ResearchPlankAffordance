@@ -7,6 +7,7 @@ using Random=UnityEngine.Random;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
+using Valve.VR;
 
 public class PlankChange : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class PlankChange : MonoBehaviour
     private int trialNumber = 1;
     public static float plankExtent;
     
-    public GameObject VRCamera,City,Plank;
+    public GameObject VRCamera,City;
 
     public BackToTrialBeginning resetTrialScript;
     
@@ -45,60 +46,84 @@ public class PlankChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
+            resetTrialScript.resetTrial();
+        }
+
         //change getKeyDown to space
         if (Input.GetKeyDown("s") && trialNumber <= 10) {
-            assignNewPlankWidth(trialPlankWidths);
-            temp = transform.localScale;
-            temp.x = curPlankWidth;
-            transform.localScale = temp; //while change skybox = false
-            VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-            City.SetActive(true);
-            this.gameObject.SetActive(true);
+            prepNextTrials();
+            // assignNewPlankWidth(trialPlankWidths);
+            // temp = transform.localScale;
+            // temp.x = curPlankWidth;
+            // transform.localScale = temp; //while change skybox = false
+            // VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+            // City.SetActive(true);
+            // this.gameObject.SetActive(true);
 
-            ++trialNumber;
+            // ++trialNumber;
         }
         
         if (DetectFall.successfulTrial && trialNumber <= 10) {
-            Debug.Log("congrats. you didnt die");
-
-            assignNewPlankWidth(trialPlankWidths);
-            temp = transform.localScale;
-            temp.x = curPlankWidth;
-            transform.localScale = temp;
-            ++trialNumber;
-            VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-            City.SetActive(true);
-            this.gameObject.SetActive(true);
-
+            prepNextTrials();
+            // assignNewPlankWidth(trialPlankWidths);
+            // temp = transform.localScale;
+            // temp.x = curPlankWidth;
+            // transform.localScale = temp;
+            // ++trialNumber;
+            // VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+            // City.SetActive(true);
+            // this.gameObject.SetActive(true);
 
 
-            DetectFall.successfulTrial = false;
+
+            // DetectFall.successfulTrial = false;
 
         }
         
         if (DetectFall.hasFallen && trialNumber <= 10) {
-            //Debug.Log("you have fallen");
+            prepNextTrials();
+            // Debug.Log("you have fallen");
 
-            assignNewPlankWidth(trialPlankWidths);
-            temp = transform.localScale;
-            temp.x = curPlankWidth;
-            transform.localScale = temp;
-            ++trialNumber;
+            // assignNewPlankWidth(trialPlankWidths);
+            // temp = transform.localScale;
+            // temp.x = curPlankWidth;
+            // transform.localScale = temp;
+            // ++trialNumber;
             
-            VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-            City.SetActive(true);
-            this.gameObject.SetActive(true);
+            // VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+            // City.SetActive(true);
+            // this.gameObject.SetActive(true);
 
 
-            resetTrialScript.resetTrial();
+            // resetTrialScript.resetTrial();
 
-            DetectFall.hasFallen = false;
+            // DetectFall.hasFallen = false;
         }
         
         
         if (trialNumber >= 11) {
-            SetUpNextTrials();
+            SetUpGroundTrials();
         }
+    }
+
+    private void prepNextTrials(){
+        assignNewPlankWidth(trialPlankWidths);
+        temp = transform.localScale;
+        temp.x = curPlankWidth;
+        transform.localScale = temp;
+        ++trialNumber;
+
+        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
+            VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+            City.SetActive(true);
+            this.gameObject.SetActive(true);
+
+            resetTrialScript.resetTrial();
+
+            DetectFall.hasFallen = false;
+        }    
+        
     }
 
     private void assignNewPlankWidth(List<float> list)
@@ -111,7 +136,7 @@ public class PlankChange : MonoBehaviour
         }
     }
     
-    void SetUpNextTrials() {
+    void SetUpGroundTrials() {
         trialNumber = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
