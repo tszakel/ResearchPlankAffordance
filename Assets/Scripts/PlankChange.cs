@@ -51,9 +51,16 @@ public class PlankChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("g")){
-            Debug.Log("Trigger or 'G' has been pressed");
-            User.transform.position = new Vector3(0,20,0);
+        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("t")){
+           
+            User.transform.position = new Vector3(0,40,0); 
+            Debug.Log("Transported Up: " + User.transform.position);
+            //resetTrialScript.resetTrial();
+        }
+
+        if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("b")){
+            User.transform.position = startPos;
+            Debug.Log("Transported To Start: " + User.transform.position);
             //resetTrialScript.resetTrial();
         }
 
@@ -125,6 +132,7 @@ public class PlankChange : MonoBehaviour
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
             City.SetActive(true);
             this.gameObject.SetActive(true);
+            User.transform.position = startPos;
 
             //resetTrialScript.resetTrial();
 
