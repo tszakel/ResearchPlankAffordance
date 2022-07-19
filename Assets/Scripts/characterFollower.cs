@@ -14,8 +14,8 @@ public class characterFollower : MonoBehaviour
 
     private void Update()
     {
-        if (headRig.parent.parent.transform.position.y != 0)
-            headRig.parent.parent.transform.position = Vector3.zero;
+        if (headRig.parent.transform.position.y != 0)
+            headRig.parent.transform.position = Vector3.zero;
     }
 
     private void FixedUpdate()
