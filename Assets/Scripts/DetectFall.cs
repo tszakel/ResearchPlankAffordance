@@ -23,13 +23,13 @@ public class DetectFall : MonoBehaviour
     public static bool hasFallen;
     public static bool successfulTrial;
 
-    //private float bodyWiggleRoom = 0.8f;
+    private float bodyWiggleRoom = 0.381f;
 
-    public float HMDTracker;
+    private float HMDTracker;
     private float lateralDifference = 0.0f;
 
-    public GameObject VRCamera,City; 
-    Vector3 startPos;
+    public GameObject VRCamera,City,Instructions,respawnLeftTrigger, respawnRightTrigger; 
+    Vector3 leftDetect ;
 
     public Renderer rend;
     
@@ -40,9 +40,8 @@ public class DetectFall : MonoBehaviour
         rend = GetComponent<Renderer>();
         rend.enabled = true;
         
-        // startPos = VRCamera.transform.position;
-        // Debug.Log("Start Position: " + startPos);
         HMDTracker = VRCamera.transform.position.z;
+        leftDectect.transform.position.x = HMDTracker - PlankChange.plankExtent - bodyWiggleRoom;
         //Debug.Log(HMDTracker);
         /*plankLeftBound = GetComponent<Renderer>().bounds.min.z;
         plankRightBound = GetComponent<Renderer>().bounds.max.z;
@@ -72,31 +71,13 @@ public class DetectFall : MonoBehaviour
     void Update()
     {
         
-        lateralDifference = Mathf.Abs((HMDTracker - VRCamera.transform.position.x));
-        if (lateralDifference > PlankChange.plankExtent)
-        {
-            Fallen();
-            // Debug.Log("lateralDif: " + lateralDifference + " extent: " + PlankChange.plankExtent);
-            // Debug.Log("you have fallen " + hasFallen);
+        lateralDifference = Mathf.Abs((HMDTracker - VRCamera.transform.position.x) + bodyWiggleRoom);
+        //Debug.Log(lateralDifference);
 
-        }
+        Fallen();
+        //monitorSuccessfulTrial(HMDTracker);
 
-        // if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
-        //     Debug.Log("trig");
-        //     VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-        //     City.SetActive(true);
-        //     rend.enabled = true;
-        // }
-
-        // if (SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any)){
-        //     Debug.Log("grip");
-
-        //     VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-        //     VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
-        //     City.SetActive(false);
-        //     rend.enabled = false;
-        // }
-        // //Debug.Log(lateralDifference);
+       
         /*plankLeftBound = GetComponent<Renderer>().bounds.min.z;
         plankRightBound = GetComponent<Renderer>().bounds.max.z;
         plankEnd = GetComponent<Renderer>().bounds.min.x;
@@ -132,19 +113,25 @@ public class DetectFall : MonoBehaviour
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
             City.SetActive(false);
-            this.gameObject.SetActive(false);
+            Instructions.SetActive(true);
+            rend.enabled = false;
 
             successfulTrial = true;
         }
     }
     
     void Fallen() {
-        VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-        VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
-        City.SetActive(false);
-        rend.enabled = false;
+        if (lateralDifference > PlankChange.plankExtent){
+            // Debug.Log("lateralDif: " + lateralDifference + " extent: " + PlankChange.plankExtent);
 
-        hasFallen = true;
+            VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+            VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
+            City.SetActive(false);
+            Instructions.SetActive(true);
+            rend.enabled = false;
+
+            hasFallen = true;
+        }
     }
     
 }

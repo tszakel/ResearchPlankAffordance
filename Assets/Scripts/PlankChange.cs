@@ -19,7 +19,7 @@ public class PlankChange : MonoBehaviour
     private int trialNumber = 1;
     public static float plankExtent;
     
-    public GameObject VRCamera,City,User;
+    public GameObject VRCamera,City,User,Instructions;
 
     Vector3 startPos;
 
@@ -46,11 +46,13 @@ public class PlankChange : MonoBehaviour
         
         for (int i = 0; i < 10; ++i) {
             maxPlankWidth -= 0.1f;
+            maxPlankWidth = (float)Math.Round(maxPlankWidth, 2);
+            Debug.Log("Plank " + i + ": " + maxPlankWidth);
             trialPlankWidths.Add(maxPlankWidth);
         }
 
         
-        Debug.Log("plank: " + plankExtent);
+        Debug.Log("plank extent: " + plankExtent);
 
     }
 
@@ -79,6 +81,8 @@ public class PlankChange : MonoBehaviour
         
         if (DetectFall.hasFallen && trialNumber <= 10) {
             Debug.Log("if statement reached");
+            DetectFall.hasFallen = false;
+            DetectFallScript.enabled = false;
             StartCoroutine(prepNextTrials());
         }
 
@@ -127,7 +131,7 @@ public class PlankChange : MonoBehaviour
     IEnumerator prepNextTrials()
     {
         Debug.Log("Waiting for user...");
-        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any));
+        yield return new WaitUntil(() => /* SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || */ Input.GetKeyDown("n") == true);
         Debug.Log("Trigger Pressed. Reactivating Scene");
 
         assignNewPlankWidth(trialPlankWidths);
@@ -138,6 +142,7 @@ public class PlankChange : MonoBehaviour
 
         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
         City.SetActive(true);
+        Instructions.SetActive(false);
         rend.enabled = true;
 
         Debug.Log("Script Enabled");
@@ -173,6 +178,10 @@ public class PlankChange : MonoBehaviour
         if (list.Any()){
             widthListIndex = Random.Range(0, list.Count);
             curPlankWidth = list[widthListIndex];
+
+            plankExtent = (curPlankWidth - minPlankWidth) / 2.0f;
+            Debug.Log("new plank extent: " + plankExtent);
+
             list.RemoveAt(widthListIndex);
         }
     }

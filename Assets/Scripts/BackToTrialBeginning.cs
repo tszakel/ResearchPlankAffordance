@@ -4,35 +4,44 @@ using UnityEngine;
 
 public class BackToTrialBeginning : MonoBehaviour
 {
-    /*private Vector3 tempPos;
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform respawnPoint;
+
+    private void OnTriggerEnter(Collider other){
+        if(other.CompareTag("Player")){
+            player.transform.position = respawnPoint.transform.position;
+            Physics.SyncTransforms();
+        }
+    }
+
+   /*  private Vector3 tempPos;
 
     private float startPositionX;
     private float startPositionY;
-    private float startPositionZ;*/
+    private float startPositionZ;
     Vector3 startPos;
     // Start is called before the first frame update
     void Start()
     { 
         startPos = this.transform.position;
-        Debug.Log("Start Position: " + startPos);
-        /*startPositionX = transform.position.x;
+        Debug.Log("Cube Start Position: " + startPos);
+        startPositionX = transform.position.x;
         startPositionY = transform.position.y;
-        startPositionZ = transform.position.z;*/
+        startPositionZ = transform.position.z;
+    }
+
+    void Update(){
+        resetTrial();
     }
 
     // Update is called once per frame
     public void resetTrial() 
     {
-        /*//Debug.Log("X: " + startPositionX + " Y: " + startPositionY + " Z: " + startPositionZ);
-        tempPos = transform.position;
-        tempPos.x = startPositionX;
-        tempPos.y = startPositionY ;
-        tempPos.z = startPositionZ;
-        transform.position = tempPos;*/
-        Debug.Log("Method called. Current position " + this.transform.position);
-
-        this.transform.position = startPos;
-        Debug.Log("position after change: " + this.transform.position);
-
-    }
+        if(Input.GetKeyDown("t")){
+            Debug.Log("Transport triggerd. Current position " + this.transform.position);
+            this.transform.position = startPos;
+            Debug.Log("Position after change: " + this.transform.position);
+        }
+        
+    } */
 }
