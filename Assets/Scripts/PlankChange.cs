@@ -61,13 +61,7 @@ public class PlankChange : MonoBehaviour
     {
 
         if(Input.GetKeyDown("d")){
-            Debug.Log("Script Disabled");
-            DetectFallScript.enabled = false;
-        }
-
-        if(Input.GetKeyDown("e")){
-            Debug.Log("Script Enabled");
-            DetectFallScript.enabled = true;
+            assignNewPlankWidth(trialPlankWidths);
         }
 
         // //change getKeyDown to space
@@ -183,6 +177,10 @@ public class PlankChange : MonoBehaviour
             Debug.Log("new plank extent: " + plankExtent);
 
             list.RemoveAt(widthListIndex);
+
+            temp = transform.localScale;
+            temp.x = curPlankWidth;
+            transform.localScale = temp;
         }
     }
     

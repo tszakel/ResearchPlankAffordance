@@ -29,7 +29,8 @@ public class DetectFall : MonoBehaviour
     private float lateralDifference = 0.0f;
 
     public GameObject VRCamera,City,Instructions,respawnLeftTrigger, respawnRightTrigger; 
-    Vector3 leftDetect ;
+    Vector3 leftDetect;
+    Vector3 rightDetect;
 
     public Renderer rend;
     
@@ -41,7 +42,13 @@ public class DetectFall : MonoBehaviour
         rend.enabled = true;
         
         HMDTracker = VRCamera.transform.position.z;
-        leftDectect.transform.position.x = HMDTracker - PlankChange.plankExtent - bodyWiggleRoom;
+
+
+        
+        //respawnLeftTrigger.transform.position.x 
+        //leftDetect = HMDTracker - PlankChange.plankExtent - bodyWiggleRoom; // x value
+
+
         //Debug.Log(HMDTracker);
         /*plankLeftBound = GetComponent<Renderer>().bounds.min.z;
         plankRightBound = GetComponent<Renderer>().bounds.max.z;
@@ -70,11 +77,18 @@ public class DetectFall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        leftDetect = respawnLeftTrigger.transform.position;
+        leftDetect.x = HMDTracker - PlankChange.plankExtent - bodyWiggleRoom;
+        respawnLeftTrigger.transform.position = leftDetect;
+
+        rightDetect = respawnRightTrigger.transform.position;
+        rightDetect.x = HMDTracker +PlankChange.plankExtent + bodyWiggleRoom;
+        respawnRightTrigger.transform.position = rightDetect;
         
         lateralDifference = Mathf.Abs((HMDTracker - VRCamera.transform.position.x) + bodyWiggleRoom);
         //Debug.Log(lateralDifference);
 
-        Fallen();
+        //Fallen();
         //monitorSuccessfulTrial(HMDTracker);
 
        
