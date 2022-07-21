@@ -88,7 +88,7 @@ public class DetectFall : MonoBehaviour
         lateralDifference = Mathf.Abs((HMDTracker - VRCamera.transform.position.x) + bodyWiggleRoom);
         //Debug.Log(lateralDifference);
 
-        //Fallen();
+        Fallen();
         //monitorSuccessfulTrial(HMDTracker);
 
        

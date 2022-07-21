@@ -15,19 +15,12 @@ public class BackToTrialBeginning : MonoBehaviour
     }
 
    /*  private Vector3 tempPos;
-
-    private float startPositionX;
-    private float startPositionY;
-    private float startPositionZ;
     Vector3 startPos;
     // Start is called before the first frame update
     void Start()
     { 
         startPos = this.transform.position;
         Debug.Log("Cube Start Position: " + startPos);
-        startPositionX = transform.position.x;
-        startPositionY = transform.position.y;
-        startPositionZ = transform.position.z;
     }
 
     void Update(){

@@ -47,7 +47,7 @@ public class PlankChange : MonoBehaviour
         for (int i = 0; i < 10; ++i) {
             maxPlankWidth -= 0.1f;
             maxPlankWidth = (float)Math.Round(maxPlankWidth, 2);
-            Debug.Log("Plank " + i + ": " + maxPlankWidth);
+            //Debug.Log("Plank " + i + ": " + maxPlankWidth);
             trialPlankWidths.Add(maxPlankWidth);
         }
 
@@ -60,9 +60,9 @@ public class PlankChange : MonoBehaviour
     void Update()
     {
 
-        if(Input.GetKeyDown("d")){
+        /* if(Input.GetKeyDown("d")){
             assignNewPlankWidth(trialPlankWidths);
-        }
+        } */
 
         // //change getKeyDown to space
         // if (Input.GetKeyDown("s") && trialNumber <= 10) {
@@ -125,8 +125,6 @@ public class PlankChange : MonoBehaviour
     IEnumerator prepNextTrials()
     {
         Debug.Log("Waiting for user...");
-        yield return new WaitUntil(() => /* SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || */ Input.GetKeyDown("n") == true);
-        Debug.Log("Trigger Pressed. Reactivating Scene");
 
         assignNewPlankWidth(trialPlankWidths);
         temp = transform.localScale;
@@ -134,12 +132,15 @@ public class PlankChange : MonoBehaviour
         transform.localScale = temp;
         ++trialNumber;
 
+        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)/*  Input.GetKeyDown("n") == true */);
+        Debug.Log("Trigger Pressed. Reactivating Scene");
+
+
         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
         City.SetActive(true);
         Instructions.SetActive(false);
         rend.enabled = true;
 
-        Debug.Log("Script Enabled");
         DetectFallScript.enabled = true;
         
         Debug.Log("User is ready!");
@@ -172,15 +173,10 @@ public class PlankChange : MonoBehaviour
         if (list.Any()){
             widthListIndex = Random.Range(0, list.Count);
             curPlankWidth = list[widthListIndex];
-
-            plankExtent = (curPlankWidth - minPlankWidth) / 2.0f;
+            plankExtent = Math.Abs((curPlankWidth - minPlankWidth) / 2.0f);
             Debug.Log("new plank extent: " + plankExtent);
 
             list.RemoveAt(widthListIndex);
-
-            temp = transform.localScale;
-            temp.x = curPlankWidth;
-            transform.localScale = temp;
         }
     }
     
