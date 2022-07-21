@@ -82,7 +82,7 @@ public class DetectFall : MonoBehaviour
         respawnLeftTrigger.transform.position = leftDetect;
 
         rightDetect = respawnRightTrigger.transform.position;
-        rightDetect.x = HMDTracker +PlankChange.plankExtent + bodyWiggleRoom;
+        rightDetect.x = HMDTracker + PlankChange.plankExtent + bodyWiggleRoom;
         respawnRightTrigger.transform.position = rightDetect;
         
         lateralDifference = Mathf.Abs((HMDTracker - VRCamera.transform.position.x) + bodyWiggleRoom);

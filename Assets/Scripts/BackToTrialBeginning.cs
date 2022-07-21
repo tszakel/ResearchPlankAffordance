@@ -8,7 +8,8 @@ public class BackToTrialBeginning : MonoBehaviour
     [SerializeField] private Transform respawnPoint;
 
     private void OnTriggerEnter(Collider other){
-        if(other.CompareTag("Player")){
+        if(other.CompareTag("Player"/* "MainCamera" */)){
+            //player.transform.position = respawnPoint.transform.position;
             player.transform.position = respawnPoint.transform.position;
             Physics.SyncTransforms();
         }

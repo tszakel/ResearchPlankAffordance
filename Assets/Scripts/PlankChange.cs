@@ -59,11 +59,6 @@ public class PlankChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        /* if(Input.GetKeyDown("d")){
-            assignNewPlankWidth(trialPlankWidths);
-        } */
-
         // //change getKeyDown to space
         // if (Input.GetKeyDown("s") && trialNumber <= 10) {
 
@@ -114,14 +109,6 @@ public class PlankChange : MonoBehaviour
         }
     }
 
-    // private void prepNextTrials(){
-    //     Debug.Log("Method reached");
-
-    //     assignNewPlankWidth(trialPlankWidths);
-    //     temp = transform.localScale;
-    //     temp.x = curPlankWidth;
-    //     transform.localScale = temp;
-    //     ++trialNumber;
     IEnumerator prepNextTrials()
     {
         Debug.Log("Waiting for user...");
@@ -145,27 +132,6 @@ public class PlankChange : MonoBehaviour
         
         Debug.Log("User is ready!");
     }
-
-    //     while (readyToProceed == false){
-    //         Debug.Log("Loop reached");
-
-    //         if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
-    //             Debug.Log("Trigger Pressed");
-    //             readyToProceed = true;
-    //             continue;
-    //         }
-    //         Debug.Log("Body of code reached");
-
-    //         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-    //         City.SetActive(true);
-    //         rend.enabled = true;
-
-    //         User.transform.position = startPos;
-
-    //         DetectFall.hasFallen = false;
-    //     }    
-        
-    // }
 
     private void assignNewPlankWidth(List<float> list)
     {
