@@ -275,7 +275,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "This experiment will test your abilty to judge plank gaps and whether
+  m_text: "This experiment will test your abilty to judge plank widths and whether
     \nor not you can sucessfully cross these gaps. \n\nWhen ready, press the trigger
     to start."
   m_isRightToLeft: 0

@@ -21,6 +21,8 @@ public class PlankChange : MonoBehaviour
     
     public GameObject VRCamera,City,User,Instructions;
 
+    bool coroutineStarted = false;
+
     Vector3 startPos;
 
     public Renderer rend;
@@ -34,9 +36,6 @@ public class PlankChange : MonoBehaviour
         rend.enabled = true;
 
         DetectFallScript = GetComponent<DetectFall>();
-
-        startPos = User.transform.position;
-        Debug.Log("Start Position: " + startPos);
 
         temp = transform.localScale;
         temp.x = maxPlankWidth;
@@ -72,36 +71,13 @@ public class PlankChange : MonoBehaviour
             Debug.Log("if statement reached");
             DetectFall.hasFallen = false;
             DetectFallScript.enabled = false;
-            StartCoroutine(prepNextTrials());
+
+            //if anything funky happens it could be in this if block
+            if(!coroutineStarted){
+                StartCoroutine(prepNextTrials());
+            }
+            
         }
-
-        //     assignNewPlankWidth(trialPlankWidths);
-        //     temp = transform.localScale;
-        //     temp.x = curPlankWidth;
-        //     transform.localScale = temp;
-        //     ++trialNumber;
-
-        //     WaitUntil(SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any)){
-
-        //     }
-        //         Debug.Log("Loop reached");
-
-        
-        //             Debug.Log("Trigger Pressed. Reactivating Scene");
-
-        //             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-        //             City.SetActive(true);
-        //             rend.enabled = true;
-
-        //             User.transform.position = startPos;
-
-        //             DetectFall.hasFallen = false;
-        //             readyToProceed = true;
-        //         }else{
-        //             continue;
-        //         }
-        //     }   
-        // }
 
         
         if (trialNumber >= 11) {
@@ -113,6 +89,7 @@ public class PlankChange : MonoBehaviour
     {
         Debug.Log("Waiting for user...");
 
+        coroutineStarted = true;
         assignNewPlankWidth(trialPlankWidths);
         temp = transform.localScale;
         temp.x = curPlankWidth;
@@ -129,6 +106,7 @@ public class PlankChange : MonoBehaviour
         rend.enabled = true;
 
         DetectFallScript.enabled = true;
+        coroutineStarted = false;
         
         Debug.Log("User is ready!");
     }
