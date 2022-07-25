@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using Valve.VR;
+using TMPro;
+
 
 
 public class DetectFall : MonoBehaviour
@@ -11,6 +13,8 @@ public class DetectFall : MonoBehaviour
     private float plankRightBound;
     private float plankLeftBound;
     private float plankEnd;
+    private float plankStart;
+
     
     private GameObject rightFoot;
     private GameObject leftFoot;
@@ -28,7 +32,9 @@ public class DetectFall : MonoBehaviour
     private float HMDTracker;
     private float lateralDifference = 0.0f;
 
-    public GameObject VRCamera,City,Instructions,respawnLeftTrigger, respawnRightTrigger; 
+    public GameObject VRCamera,City,Instructions,respawnLeftTrigger,respawnRightTrigger; 
+    private TextMeshProUGUI alterInstructions;
+
     Vector3 leftDetect;
     Vector3 rightDetect;
 
@@ -42,6 +48,9 @@ public class DetectFall : MonoBehaviour
         rend.enabled = true;
         
         HMDTracker = VRCamera.transform.position.z;
+        plankStart = GetComponent<Renderer>().bounds.min.x + 5;
+        
+        Debug.Log("start" + plankStart);
 
 
         
@@ -86,6 +95,7 @@ public class DetectFall : MonoBehaviour
         respawnRightTrigger.transform.position = rightDetect;
         
         lateralDifference = Mathf.Abs((HMDTracker - VRCamera.transform.position.x) + bodyWiggleRoom);
+        Debug.Log(lateralDifference);
         //Debug.Log(lateralDifference);
 
         Fallen();
@@ -107,26 +117,12 @@ public class DetectFall : MonoBehaviour
 
     }
 
-    // private void MonitorFeet(float rightFoot, float leftFoot)
-    // {
-    //     if((checkWithinBounds(rightFoot) == false && checkWithinBounds(leftFoot)) == false){
-    //         Fallen();
-    //     }
-    // }
-    
-    // bool checkWithinBounds(float foot) {
-    //     if (foot <= plankRightBound && foot >= plankLeftBound) {
-    //         Debug.Log("you're within bounds");
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
     void monitorSuccessfulTrial(float userCenter) {
         if(userCenter <= plankEnd){
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
             City.SetActive(false);
+            alterInstructions.text = "You have successfully crossed.\n Please wait to be guided back and press the trigger when you're ready to begin the next trial.";
             Instructions.SetActive(true);
             rend.enabled = false;
 
@@ -135,7 +131,7 @@ public class DetectFall : MonoBehaviour
     }
     
     void Fallen() {
-        if (lateralDifference > PlankChange.plankExtent){
+        if ((lateralDifference > PlankChange2.plankExtent + bodyWiggleRoom) &&  (VRCamera.transform.position.z > plankStart)){
             // Debug.Log("lateralDif: " + lateralDifference + " extent: " + PlankChange.plankExtent);
 
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
