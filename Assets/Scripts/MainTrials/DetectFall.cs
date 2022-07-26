@@ -10,29 +10,16 @@ using TMPro;
 
 public class DetectFall : MonoBehaviour
 {
-    private float plankRightBound;
-    private float plankLeftBound;
-    private float plankEnd;
-    private float plankStart;
-
+    private float plankEnd, plankStart;
     
-    private GameObject rightFoot;
-    private GameObject leftFoot;
-    private float rightFootCenter;
-    private float leftFootCenter;
-    
-    private GameObject player;
-    private float playerCenter;
-    
-    public static bool hasFallen;
-    public static bool successfulTrial;
+    public static bool hasFallen, successfulTrial;
 
     private float bodyWiggleRoom = 0.381f;
 
     private float HMDTracker;
     private float lateralDifference = 0.0f;
 
-    public GameObject VRCamera,City,Instructions,respawnLeftTrigger,respawnRightTrigger; 
+    public GameObject VRCamera,City,Instructions,actionPrompt,respawnLeftTrigger,respawnRightTrigger; 
     private TextMeshProUGUI alterInstructions;
 
     Vector3 leftDetect;
@@ -48,39 +35,13 @@ public class DetectFall : MonoBehaviour
         rend.enabled = true;
         
         HMDTracker = VRCamera.transform.position.z;
-        plankStart = GetComponent<Renderer>().bounds.min.x + 5;
+        plankStart = GetComponent<Renderer>().bounds.min.z /* + 5 */;
+        plankEnd = GetComponent<Renderer>().bounds.max.z;
         
-        Debug.Log("start" + plankStart);
+        Debug.Log("start " + plankStart);
+        Debug.Log("end " + plankEnd);
 
-
-        
-        //respawnLeftTrigger.transform.position.x 
-        //leftDetect = HMDTracker - PlankChange.plankExtent - bodyWiggleRoom; // x value
-
-
-        //Debug.Log(HMDTracker);
-        /*plankLeftBound = GetComponent<Renderer>().bounds.min.z;
-        plankRightBound = GetComponent<Renderer>().bounds.max.z;
-        plankEnd = GetComponent<Renderer>().bounds.min.x;
-        
-        rightFoot = GameObject.FindWithTag("rightFoot");
-        leftFoot = GameObject.FindWithTag("leftFoot");
-        
-        rightFootCenter = rightFoot.GetComponent<Renderer>().bounds.center.z;
-        leftFootCenter = leftFoot.GetComponent<Renderer>().bounds.center.z;
-        
-        player = GameObject.FindWithTag("Player");
-        playerCenter = player.GetComponent<Renderer>().bounds.center.x;*/
-        
-        //Debug.Log("right foot position: " + rightFootCenter + " left foot position: " + leftFootCenter);
-
-
-
-        /*Debug.Log("plankLeftBound: " + plankLeftBound + " " + "plankRightBound: " + plankRightBound + " " +
-                  "plankEnd: " + plankEnd + " " + "rightFootCenter: " + rightFootCenter + " " +
-                  "leftFootCenter: " + leftFootCenter + " " + "playerCenter: " + playerCenter);*/
-
-        //Debug.Log("X: " + plankSize.x + " " + "Y: " + plankSize.y + " " + "Z: " + plankSize.z);
+        alterInstructions = Instructions.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -94,37 +55,27 @@ public class DetectFall : MonoBehaviour
         rightDetect.x = HMDTracker + PlankChange.plankExtent + bodyWiggleRoom;
         respawnRightTrigger.transform.position = rightDetect;
         
-        lateralDifference = Mathf.Abs((HMDTracker - VRCamera.transform.position.x) + bodyWiggleRoom);
+        lateralDifference = Mathf.Abs((0 - VRCamera.transform.position.x) + bodyWiggleRoom);
         Debug.Log(lateralDifference);
         //Debug.Log(lateralDifference);
 
+        HMDTracker = VRCamera.transform.position.z;
+
         Fallen();
-        //monitorSuccessfulTrial(HMDTracker);
-
-       
-        /*plankLeftBound = GetComponent<Renderer>().bounds.min.z;
-        plankRightBound = GetComponent<Renderer>().bounds.max.z;
-        plankEnd = GetComponent<Renderer>().bounds.min.x;
-
-        rightFootCenter = rightFoot.GetComponent<Renderer>().bounds.center.z;
-        leftFootCenter = leftFoot.GetComponent<Renderer>().bounds.center.z;
-        
-        playerCenter = player.GetComponent<Renderer>().bounds.center.x;*/
-
-        //MonitorFeet(rightFootCenter,leftFootCenter);
-        //checkWithinBounds();
-        //monitorSuccessfulTrial(playerCenter);
+        monitorSuccessfulTrial(HMDTracker);
 
     }
 
     void monitorSuccessfulTrial(float userCenter) {
-        if(userCenter <= plankEnd){
+        if(userCenter >= plankEnd){
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
             City.SetActive(false);
-            alterInstructions.text = "You have successfully crossed.\n Please wait to be guided back and press the trigger when you're ready to begin the next trial.";
-            Instructions.SetActive(true);
             rend.enabled = false;
+            alterInstructions.text = "You have successfully crossed.\n\n Wait to be guided back and press the trigger when you're ready to begin the next trial.";
+            actionPrompt.SetActive(false);
+            Instructions.SetActive(true);
+            
 
             successfulTrial = true;
         }
@@ -132,13 +83,14 @@ public class DetectFall : MonoBehaviour
     
     void Fallen() {
         if ((lateralDifference > PlankChange2.plankExtent + bodyWiggleRoom) &&  (VRCamera.transform.position.z > plankStart)){
-            // Debug.Log("lateralDif: " + lateralDifference + " extent: " + PlankChange.plankExtent);
-
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
             City.SetActive(false);
-            Instructions.SetActive(true);
             rend.enabled = false;
+            alterInstructions.text = "You have fallen.\n\n Wait to be guided and press the trigger when you're ready to begin the next trial.";
+            actionPrompt.SetActive(false);
+            Instructions.SetActive(true);
+            
 
             hasFallen = true;
         }

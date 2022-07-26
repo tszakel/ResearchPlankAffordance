@@ -78,7 +78,7 @@ public class PlankChange2 : MonoBehaviour
                 transform.localScale = temp;
             }
             if(blockNumber%2 == 1 && transform.localScale.x >= maxPlankWidth){
-                alterLimitReached.text = "You have reached the maximum plank width. Please stand walk across the plank.";
+                alterLimitReached.text = "You have reached the maximum plank width.";
                 if(!limitReachedCoroutineStarted){
                     StartCoroutine(plankLimitReached());
                 }
@@ -91,7 +91,7 @@ public class PlankChange2 : MonoBehaviour
                 transform.localScale = temp;
             }
             if(blockNumber%2 == 0 && transform.localScale.x <= minPlankWidth){
-                alterLimitReached.text = "You have reached the minimum plank width. Please stand walk across the plank.";
+                alterLimitReached.text = "You have reached the minimum plank width.";
                 if(!limitReachedCoroutineStarted){
                     StartCoroutine(plankLimitReached());
                 }
@@ -163,6 +163,9 @@ public class PlankChange2 : MonoBehaviour
 
      IEnumerator actionStandBy(){
         Debug.Log("Waiting for trial result...");
+        reachedLimitPrompt.SetActive(false);
+        YesNoQuestion.SetActive(false);
+        actionPrompt.SetActive(true);
 
         actionCoroutineStarted = true;
         yield return new WaitUntil(() => DetectFall.hasFallen == true || DetectFall.successfulTrial == true);
@@ -189,12 +192,7 @@ public class PlankChange2 : MonoBehaviour
     IEnumerator resetParticipant(){
         resetParticipantCoroutineStarted = true;
         yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("r"));
-
-        VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-        City.SetActive(true);
         Instructions.SetActive(false);
-        alterInstructions.text = "You have fallen.\n Wait to be guided and press the trigger when you're ready to begin the next trial.";
-        rend.enabled = true;
 
         if(!generateNextCoroutineStarted){
             StartCoroutine(GenerateNext());
@@ -206,9 +204,14 @@ public class PlankChange2 : MonoBehaviour
 
     IEnumerator GenerateNext(){
         generateNextCoroutineStarted = true;
+        if(blockNumber >= maxTrials){
+            //load next
+        }
+
         BufferText.SetActive(true);
 
         yield return new WaitForSeconds(5);
+        
 
         if(blockNumber%2 == 0){
             //record plank size
@@ -225,8 +228,12 @@ public class PlankChange2 : MonoBehaviour
             transform.localScale = temp;
             ++blockNumber;
 
-            alterYesNo.text = "Is this the *smallest* width you feel comfortable walking across?\n Trigger for 'Yes'\n Squeeze for 'No'";
+            alterYesNo.text = "Is this the *SMALLEST* width you feel comfortable walking across?\n Trigger for 'Yes'\n Squeeze for 'No'";
         }
+
+        VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+        City.SetActive(true);
+        rend.enabled = true;
 
         BufferText.SetActive(false);
         YesNoQuestion.SetActive(true);
