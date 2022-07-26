@@ -111,8 +111,9 @@ public class PlankChange2 : MonoBehaviour
         Debug.Log("Waiting for response...");
 
         responseCoroutineStarted = true;
-        yield return new WaitUntil(() => /* SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) */ Input.GetKeyDown("n") == true || Input.GetKeyDown("y") == true);
-        if(Input.GetKeyDown("y") == true){
+        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) ||
+                                     Input.GetKeyDown("n") == true || Input.GetKeyDown("y") == true);
+        if(Input.GetKeyDown("y") == true || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) ){
             if(!actionCoroutineStarted){
                 StartCoroutine(actionStandBy());
             }
@@ -141,7 +142,7 @@ public class PlankChange2 : MonoBehaviour
         Debug.Log("Waiting to scale...");
         scaleCoroutineStarted = true;
 
-        yield return new WaitUntil(() => /* SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) */ Input.GetKey("s") == true);
+        yield return new WaitUntil(() => /* SteamVR_Actions._default.squeeze.GetStateDown(SteamVR_Input_Sources.Any) || */ Input.GetKey("s") == true);
 
         scaleActive = true;
         scaleCoroutineStarted = false;
@@ -220,7 +221,7 @@ public class PlankChange2 : MonoBehaviour
             transform.localScale = temp;
             ++blockNumber;
 
-            alterYesNo.text = "Is this a width you feel comfortable walking across?\n Trigger for 'Yes'\n Squeeze for 'No'";
+            alterYesNo.text = "Is this a width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
         }else{
             //record plank size
             temp = transform.localScale;
@@ -228,7 +229,7 @@ public class PlankChange2 : MonoBehaviour
             transform.localScale = temp;
             ++blockNumber;
 
-            alterYesNo.text = "Is this the *SMALLEST* width you feel comfortable walking across?\n Trigger for 'Yes'\n Squeeze for 'No'";
+            alterYesNo.text = "Is this the *SMALLEST* width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
         }
 
         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
