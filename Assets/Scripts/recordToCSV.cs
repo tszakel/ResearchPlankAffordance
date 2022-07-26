@@ -9,6 +9,10 @@ using UnityEngine;
 public class recordToCSV : MonoBehaviour
 {
     string filename = "";
+    string filePath, newEntry;
+    string DirectoryPath1;
+
+    //FileStream file = File.Create(Application.persistentDataPath + "/" + foldername + "/" + filesavename + fileextnison);
     /*
     [System.Serializable]
     public class Participant{
@@ -25,8 +29,11 @@ public class recordToCSV : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        filename = Application.dataPath + "test.csv";
-        recordPrePostData("tally",2, (float)7.76,"PreTrialData-Sky.csv");
+        DirectoryPath1 = Application.dataPath + "/ExperimentData";
+        //recordPrePostData("tally", 2, (float)7.76);
+        //recordPrePostData("tally", 3, (float)3.44);
+
+        //Debug.Log("Data path: "+ DirectoryPath1);
     }
 
     // Update is called once per frame
@@ -35,29 +42,31 @@ public class recordToCSV : MonoBehaviour
         
     }
 
-    public void recordPrePostData(string name, int blockNum, float width, string filepath){
-
-        /* Debug.Log("Hello");
-        filename = Application.dataPath 
-        TextWriter tw = new StreamWriter(filepath, true);
-        tw.WriteLine(name + "," + blockNum + "," + width); */
-        TextWriter tw = new StreamWriter(filename, false);
-        tw.WriteLine("Name, Health, Damage, Defense");
-        tw.Close();
-
-        tw = new StreamWriter(filename, true);
-        tw.Close();
-        
-        /* try
-        {
-            using(System.IO.StreamWriter file = new System.IO.StreamWriter(@filepath, true)){
-                file.WriteLine(name + "," + blockNum + "," + width);
+    public void recordMainTrialData(string name, int blockNum, float width, string skyOrGround){
+        filePath = DirectoryPath1 + "/" + name + ".csv";
+        if(!File.Exists(filePath)){
+            using (StreamWriter sw = File.CreateText(filePath)){
+                sw.WriteLine("Name, Block #, Width");
+            }
+        }else{
+            using (StreamWriter sw = File.AppendText(filePath)){
+                newEntry = "" + name + "," + blockNum + "," + width;
+                sw.WriteLine(newEntry);
             }
         }
-        catch (System.Exception ex)
-        {
-            
-            throw new ApplicationException("This program kaputed :", ex);
-        } */
+    }
+
+    public void recordPrePostData(string name, int blockNum, float width, string skyOrGround){
+        filePath = DirectoryPath1 + "/" + name + ".csv";
+        if(!File.Exists(filePath)){
+            using (StreamWriter sw = File.CreateText(filePath)){
+                sw.WriteLine("Name, Block #, Width");
+            }
+        }else{
+            using (StreamWriter sw = File.AppendText(filePath)){
+                newEntry = "" + name + "," + blockNum + "," + width;
+                sw.WriteLine(newEntry);
+            }
+        }
     }
 }
