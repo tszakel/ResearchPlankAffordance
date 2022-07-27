@@ -25,7 +25,7 @@ public class DetectFall : MonoBehaviour
     Vector3 leftDetect;
     Vector3 rightDetect;
 
-    public Renderer rend;
+    private Renderer rend;
     
 
     // Start is called before the first frame update

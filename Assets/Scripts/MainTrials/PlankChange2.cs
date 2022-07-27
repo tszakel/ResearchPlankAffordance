@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using System;
 using Valve.VR;
+using UnityEngine.SceneManagement;
+
 
 
 public class PlankChange2 : MonoBehaviour
@@ -21,20 +23,13 @@ public class PlankChange2 : MonoBehaviour
     private TextMeshProUGUI alterYesNo, alterLimitReached, alterScalePrompt, alterInstructions;
 
     private int blockNumber = 1;
-    public int maxTrials = 4;
+    public int maxTrials;
 
-    bool responseCoroutineStarted = false;
-    bool scaleCoroutineStarted = false;
-    bool generateNextCoroutineStarted = false;
-    bool limitReachedCoroutineStarted = false;
-    bool actionCoroutineStarted = false;
-    bool resetParticipantCoroutineStarted = false;
-
-
-
-    bool scaleActive = false;
+    bool responseCoroutineStarted, scaleCoroutineStarted, generateNextCoroutineStarted, limitReachedCoroutineStarted, actionCoroutineStarted,resetParticipantCoroutineStarted, scaleActive;
 
     public recordToCSV recordtocsv;
+    public string userName;
+    public bool skyOrGround;
 
     private Renderer rend; //change to public
     private DetectFall DetectFallScript;
@@ -64,6 +59,11 @@ public class PlankChange2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if(blockNumber > maxTrials){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
         if(YesNoQuestion.activeSelf){
             if(!responseCoroutineStarted){
                 StartCoroutine(waitForResponse());
@@ -118,10 +118,6 @@ public class PlankChange2 : MonoBehaviour
                 StartCoroutine(actionStandBy());
             }
             responseCoroutineStarted = false;
-            /* if(!generateNextCoroutineStarted){
-                StartCoroutine(GenerateNext());
-            }
-            responseCoroutineStarted = false; */
         }else{
             YesNoQuestion.SetActive(false);
             if(blockNumber%2 == 1){
@@ -172,6 +168,8 @@ public class PlankChange2 : MonoBehaviour
         yield return new WaitUntil(() => DetectFall.hasFallen == true || DetectFall.successfulTrial == true);
 
         if(DetectFall.hasFallen == true){
+            recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
+
             DetectFall.hasFallen = false;
             DetectFallScript.enabled = false;
 
@@ -180,6 +178,8 @@ public class PlankChange2 : MonoBehaviour
             }
 
         }else if(DetectFall.successfulTrial == true){
+            recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
+
             DetectFall.successfulTrial = false;
             DetectFallScript.enabled = false;
 
@@ -192,9 +192,8 @@ public class PlankChange2 : MonoBehaviour
 
     IEnumerator resetParticipant(){
         resetParticipantCoroutineStarted = true;
-        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("r"));
+        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("r") == true);
         Instructions.SetActive(false);
-
         if(!generateNextCoroutineStarted){
             StartCoroutine(GenerateNext());
         }
@@ -202,12 +201,8 @@ public class PlankChange2 : MonoBehaviour
         resetParticipantCoroutineStarted = false;
     }
 
-
     IEnumerator GenerateNext(){
         generateNextCoroutineStarted = true;
-        if(blockNumber >= maxTrials){
-            //load next
-        }
 
         BufferText.SetActive(true);
 
@@ -215,7 +210,6 @@ public class PlankChange2 : MonoBehaviour
         
 
         if(blockNumber%2 == 0){
-            //record plank size
             temp = transform.localScale;
             temp.x = minPlankWidth;
             transform.localScale = temp;
@@ -223,7 +217,6 @@ public class PlankChange2 : MonoBehaviour
 
             alterYesNo.text = "Is this a width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
         }else{
-            //record plank size
             temp = transform.localScale;
             temp.x = maxPlankWidth;
             transform.localScale = temp;

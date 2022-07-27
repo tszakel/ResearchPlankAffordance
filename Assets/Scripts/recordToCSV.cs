@@ -8,65 +8,70 @@ using UnityEngine;
 
 public class recordToCSV : MonoBehaviour
 {
-    string filename = "";
     string filePath, newEntry;
-    string DirectoryPath1;
+    string DirectoryPathSky;
+    string DirectoryPathGround;
 
-    //FileStream file = File.Create(Application.persistentDataPath + "/" + foldername + "/" + filesavename + fileextnison);
-    /*
-    [System.Serializable]
-    public class Participant{
-        public string name;
-        public int blockNumber;
-        public float plankWidth;
-    }
-    [System.Serializable]
-    public class ParticipantData{
-        public Participant[] participant;
-    }
-
-    public ParticipantData user = new ParticipantData() */
     // Start is called before the first frame update
     void Start()
     {
-        DirectoryPath1 = Application.dataPath + "/ExperimentData";
-        //recordPrePostData("tally", 2, (float)7.76);
-        //recordPrePostData("tally", 3, (float)3.44);
-
-        //Debug.Log("Data path: "+ DirectoryPath1);
+        DirectoryPathSky = Application.dataPath + "/ExperimentData/SkyData";
+        DirectoryPathGround = Application.dataPath + "/ExperimentData/GroundData";
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+
+    public void recordMainTrialData(string name, int blockNum, float width, bool fall, bool skyOrGround){
+        if(skyOrGround){
+            filePath = DirectoryPathSky + "/" + name + "-sky.csv";
+        }else{
+            filePath = DirectoryPathGround + "/" + name + "-ground.csv";       
+        }
+
+        if(fall){
+            newEntry = "" + blockNum + "," + width + ", Yes";
+        }else{
+            newEntry = "" + blockNum + "," + width + ", No";
+        }
         
-    }
 
-    public void recordMainTrialData(string name, int blockNum, float width, string skyOrGround){
-        filePath = DirectoryPath1 + "/" + name + ".csv";
-        if(!File.Exists(filePath)){
-            using (StreamWriter sw = File.CreateText(filePath)){
-                sw.WriteLine("Name, Block #, Width");
+        if(blockNum == 1){
+            using (StreamWriter sw = File.AppendText(filePath)){
+                sw.WriteLine("MainTrials");
+                sw.WriteLine("Block #, Plank Width, Fall?");
+                sw.WriteLine(newEntry);
             }
         }else{
             using (StreamWriter sw = File.AppendText(filePath)){
-                newEntry = "" + name + "," + blockNum + "," + width;
                 sw.WriteLine(newEntry);
             }
         }
     }
 
-    public void recordPrePostData(string name, int blockNum, float width, string skyOrGround){
-        filePath = DirectoryPath1 + "/" + name + ".csv";
-        if(!File.Exists(filePath)){
-            using (StreamWriter sw = File.CreateText(filePath)){
-                sw.WriteLine("Name, Block #, Width");
+    public void recordPrePostData(string name, int blockNum, float width, bool skyOrGround, bool preOrPost){
+        if(skyOrGround){
+            filePath = DirectoryPathSky + "/" + name + "-sky.csv";
+        }else{
+            filePath = DirectoryPathGround + "/" + name + "-ground.csv";
+        }   
+
+        newEntry = "" + blockNum + "," + width;
+
+        if(blockNum == 1 && preOrPost){
+            using (StreamWriter sw = File.AppendText(filePath)){
+                sw.WriteLine("PreTest");
+                sw.WriteLine("Block #, Plank Width");
+                sw.WriteLine(newEntry);
+            }
+        }else if(blockNum == 1 && !preOrPost){
+            using (StreamWriter sw = File.AppendText(filePath)){
+                sw.WriteLine("PostTest");
+                sw.WriteLine("Block #, Plank Width");
+                sw.WriteLine(newEntry);
             }
         }else{
             using (StreamWriter sw = File.AppendText(filePath)){
-                newEntry = "" + name + "," + blockNum + "," + width;
                 sw.WriteLine(newEntry);
             }
-        }
+        }    
     }
 }

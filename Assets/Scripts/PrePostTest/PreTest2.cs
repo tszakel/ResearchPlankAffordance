@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using System;
 using Valve.VR;
+using UnityEngine.SceneManagement;
+
 
 
 public class PreTest2 : MonoBehaviour
@@ -19,15 +21,14 @@ public class PreTest2 : MonoBehaviour
     private TextMeshProUGUI alterYesNo, alterLimitReached, alterScalePrompt;
 
     private int blockNumber = 1;
+    public int maxTrials;
 
-    bool responseCoroutineStarted = false;
-    bool scaleCoroutineStarted = false;
-    bool generateNextCoroutineStarted = false;
-    bool limitReachedCoroutineStarted = false;
 
-    bool scaleActive = false;
+    bool responseCoroutineStarted, scaleCoroutineStarted, generateNextCoroutineStarted, limitReachedCoroutineStarted, scaleActive;
 
     public recordToCSV recordtocsv;
+    public string userName;
+    public bool skyOrGround, preOrPost;
 
 
 
@@ -43,11 +44,18 @@ public class PreTest2 : MonoBehaviour
         alterScalePrompt = scalePrompt.GetComponent<TextMeshProUGUI>();
 
         YesNoQuestion.SetActive(true);
+
+        //Debug.Log("user name: " + userName + ", sky/ground: " + skyOrGround);
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if(blockNumber > maxTrials){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
         if(YesNoQuestion.activeSelf){
             if(!responseCoroutineStarted){
                 StartCoroutine(waitForResponse());
@@ -160,21 +168,23 @@ public class PreTest2 : MonoBehaviour
         yield return new WaitForSeconds(5);
 
         if(blockNumber%2 == 0){
-            //record plank size
+            recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);
+
             temp = transform.localScale;
             temp.x = minPlankWidth;
             transform.localScale = temp;
-            ++blockNumber;
-
             alterYesNo.text = "Is this a width you feel comfortable walking across?\n Trigger for 'Yes'\n Squeeze for 'No'";
         }else{
-            //record plank size
+            recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);         
+
             temp = transform.localScale;
             temp.x = maxPlankWidth;
             transform.localScale = temp;
-            ++blockNumber;
             alterYesNo.text = "Is this the *smallest* width you feel comfortable walking across?\n Trigger for 'Yes'\n Squeeze for 'No'";
         }
+
+        ++blockNumber;
+
         BufferText.SetActive(false);
         YesNoQuestion.SetActive(true);
 

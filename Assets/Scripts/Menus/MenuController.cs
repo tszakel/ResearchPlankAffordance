@@ -7,7 +7,6 @@ using Valve.VR;
 
 public class MenuController : MonoBehaviour
 {
-
     void Update(){
         if (SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || Input.GetKeyDown("s")){
             LoadNextScene();
@@ -18,11 +17,4 @@ public class MenuController : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-    
-    public void QuitGame()
-    {
-        Debug.Log("Game terminated");
-        Application.Quit();
-    }
-    
 }
