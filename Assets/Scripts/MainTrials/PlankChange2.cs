@@ -14,8 +14,6 @@ public class PlankChange2 : MonoBehaviour
     public float maxPlankWidth = 1.00f;
     public float minPlankWidth = 0.05f;
     private float curPlankWidth;
-    List<float> trialPlankWidths = new List<float>();
-    private float recordWidth;
     public static float plankExtent;
 
 
@@ -29,7 +27,8 @@ public class PlankChange2 : MonoBehaviour
 
     public recordToCSV recordtocsv;
     public string userName;
-    public bool skyOrGround;
+    public bool skyOrGround; 
+    public static bool startToMonitor;
 
     private Renderer rend; //change to public
     private DetectFall DetectFallScript;
@@ -70,7 +69,7 @@ public class PlankChange2 : MonoBehaviour
             }
         }
 
-        if(scaleActive && Input.GetKey("s")){
+        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
             if(blockNumber%2 == 1 && transform.localScale.x < maxPlankWidth){
                 temp = transform.localScale;
                 temp.x += 0.01f;
@@ -98,7 +97,7 @@ public class PlankChange2 : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown("d") && scaleActive){
+        if(Input.GetKeyDown("d") && scaleActive || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) && scaleActive){
             scaleActive = false;
             scalePrompt.SetActive(false);
             YesNoQuestion.SetActive(true);
@@ -121,10 +120,10 @@ public class PlankChange2 : MonoBehaviour
         }else{
             YesNoQuestion.SetActive(false);
             if(blockNumber%2 == 1){
-                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Press ... when done";
+                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Squeeze ... when done";
                 scalePrompt.SetActive(true);
             }else{
-                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Press ... when done";
+                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Squeeze ... when done";
                 scalePrompt.SetActive(true);
             }
             if(!scaleCoroutineStarted){
@@ -138,7 +137,7 @@ public class PlankChange2 : MonoBehaviour
         Debug.Log("Waiting to scale...");
         scaleCoroutineStarted = true;
 
-        yield return new WaitUntil(() => /* SteamVR_Actions._default.squeeze.GetStateDown(SteamVR_Input_Sources.Any) || */ Input.GetKey("s") == true);
+        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any) || Input.GetKey("s") == true);
 
         scaleActive = true;
         scaleCoroutineStarted = false;
@@ -165,10 +164,11 @@ public class PlankChange2 : MonoBehaviour
         actionPrompt.SetActive(true);
 
         actionCoroutineStarted = true;
+        startToMonitor = true;
         yield return new WaitUntil(() => DetectFall.hasFallen == true || DetectFall.successfulTrial == true);
 
         if(DetectFall.hasFallen == true){
-            recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
+            //recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
 
             DetectFall.hasFallen = false;
             DetectFallScript.enabled = false;
@@ -178,7 +178,7 @@ public class PlankChange2 : MonoBehaviour
             }
 
         }else if(DetectFall.successfulTrial == true){
-            recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
+            //recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
 
             DetectFall.successfulTrial = false;
             DetectFallScript.enabled = false;
@@ -205,6 +205,7 @@ public class PlankChange2 : MonoBehaviour
         generateNextCoroutineStarted = true;
 
         BufferText.SetActive(true);
+        startToMonitor = false;
 
         yield return new WaitForSeconds(5);
         

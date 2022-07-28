@@ -56,13 +56,22 @@ public class DetectFall : MonoBehaviour
         respawnRightTrigger.transform.position = rightDetect;
         
         lateralDifference = Mathf.Abs((0 - VRCamera.transform.position.x) + bodyWiggleRoom);
-        Debug.Log(lateralDifference);
         //Debug.Log(lateralDifference);
 
         HMDTracker = VRCamera.transform.position.z;
+        Debug.Log(PlankChange2.startToMonitor);
 
-        Fallen();
-        monitorSuccessfulTrial(HMDTracker);
+        if(PlankChange2.startToMonitor){
+            Fallen();
+            monitorSuccessfulTrial(HMDTracker);
+        }
+
+        /* if(SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
+            Debug.Log("Squeezing");
+        }else{
+            Debug.Log("Not Squeezing");
+        } */
+        
 
     }
 

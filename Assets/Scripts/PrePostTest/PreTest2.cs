@@ -62,7 +62,7 @@ public class PreTest2 : MonoBehaviour
             }
         }
 
-        if(scaleActive && Input.GetKey("s")){
+        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
             if(blockNumber%2 == 1 && transform.localScale.x < maxPlankWidth){
                 temp = transform.localScale;
                 temp.x += 0.01f;
@@ -90,7 +90,7 @@ public class PreTest2 : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown("d") && scaleActive){
+        if(Input.GetKeyDown("d") && scaleActive || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) && scaleActive){
             scaleActive = false;
             scalePrompt.SetActive(false);
             YesNoQuestion.SetActive(true);
@@ -103,8 +103,9 @@ public class PreTest2 : MonoBehaviour
         Debug.Log("Waiting for response...");
 
         responseCoroutineStarted = true;
-        yield return new WaitUntil(() => /* SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) */ Input.GetKeyDown("n") == true || Input.GetKeyDown("y") == true);
-        if(Input.GetKeyDown("y") == true){
+        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) ||
+                                     Input.GetKeyDown("n") == true || Input.GetKeyDown("y") == true);
+        if(Input.GetKeyDown("y") == true || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any)){
             recordWidth = transform.localScale.x;
             Debug.Log("Width recorded: " + recordWidth);
             if(!generateNextCoroutineStarted){
@@ -114,10 +115,10 @@ public class PreTest2 : MonoBehaviour
         }else{
             YesNoQuestion.SetActive(false);
             if(blockNumber%2 == 1){
-                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Press ... when done";
+                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Squeeze ... when done";
                 scalePrompt.SetActive(true);
             }else{
-                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Press ... when done";
+                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Squeeze ... when done";
                 scalePrompt.SetActive(true);
             }
             if(!scaleCoroutineStarted){
@@ -131,7 +132,7 @@ public class PreTest2 : MonoBehaviour
         Debug.Log("Waiting to scale...");
 
         scaleCoroutineStarted = true;
-        yield return new WaitUntil(() => /* SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) */ Input.GetKey("s") == true);
+        yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any) || Input.GetKey("s") == true);
 
         scaleActive = true;
         scaleCoroutineStarted = false;
@@ -173,14 +174,14 @@ public class PreTest2 : MonoBehaviour
             temp = transform.localScale;
             temp.x = minPlankWidth;
             transform.localScale = temp;
-            alterYesNo.text = "Is this a width you feel comfortable walking across?\n Trigger for 'Yes'\n Squeeze for 'No'";
+            alterYesNo.text = "Is this a width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
         }else{
             recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);         
 
             temp = transform.localScale;
             temp.x = maxPlankWidth;
             transform.localScale = temp;
-            alterYesNo.text = "Is this the *smallest* width you feel comfortable walking across?\n Trigger for 'Yes'\n Squeeze for 'No'";
+            alterYesNo.text = "Is this the *smallest* width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
         }
 
         ++blockNumber;
