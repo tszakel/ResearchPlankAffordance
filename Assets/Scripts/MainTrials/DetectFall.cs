@@ -16,13 +16,13 @@ public class DetectFall : MonoBehaviour
 
     private float bodyWiggleRoom = 0.381f;
 
-    private float HMDTracker;
+    private float HMDTracker, userStartLateral;
     private float lateralDifference = 0.0f;
 
     public GameObject VRCamera,City,Instructions,actionPrompt,respawnLeftTrigger,respawnRightTrigger; 
     private TextMeshProUGUI alterInstructions;
 
-   /*  Vector3 leftDetect;
+   /*Vector3 leftDetect;
     Vector3 rightDetect; */
 
 
@@ -35,19 +35,19 @@ public class DetectFall : MonoBehaviour
     {
         rend = GetComponent<Renderer>();
         rend.enabled = true;
-
-        //VRCamera.transform.position = RotateWithUser.headV;
-        //VRCamera.transform.rotation = RotateWithUser.headQ;
         
         /* HMDTracker = VRCamera.transform.position.z;
         plankStart = GetComponent<Renderer>().bounds.min.z + 5; // old way
         plankEnd = GetComponent<Renderer>().bounds.max.z; */
 
         HMDTracker = RotateWithUser.headPos.x;
-        //plankStart = GetComponent<Renderer>().bounds.min.z + 5; // old way
-        //plankEnd = GetComponent<Renderer>().bounds.max.z;
+        plankStart = RotateWithUser.headPos.x - 1; 
+        plankEnd = RotateWithUser.headPos.x - 5;
+        userStartLateral = RotateWithUser.headPos.z;
         
-        Debug.Log("Start head pos " + HMDTracker);
+        Debug.Log("user start " + HMDTracker);
+        Debug.Log("plank start " + plankStart);
+        Debug.Log("plank end " + plankEnd);
 
         //Debug.Log("start " + plankStart);
         //Debug.Log("end " + plankEnd);
@@ -67,10 +67,10 @@ public class DetectFall : MonoBehaviour
         respawnRightTrigger.transform.position = rightDetect; */
 
         
-        lateralDifference = Mathf.Abs((0 - VRCamera.transform.position.x) + bodyWiggleRoom);
-        //Debug.Log(lateralDifference);
+        lateralDifference = Mathf.Abs((userStartLateral - RotateWithUser.headPos.z) + bodyWiggleRoom);
+        Debug.Log(lateralDifference);
 
-       // HMDTracker = VRCamera.transform.position.z;
+        HMDTracker = RotateWithUser.headPos.x;
         //Debug.Log(RotateWithUser.headPos);
 
         if(PlankChange2.startToMonitor){
@@ -90,7 +90,6 @@ public class DetectFall : MonoBehaviour
             actionPrompt.SetActive(false);
             Instructions.SetActive(true);
             
-
             successfulTrial = true;
         }
     }

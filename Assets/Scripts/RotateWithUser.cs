@@ -96,7 +96,8 @@ public class RotateWithUser : MonoBehaviour
             /* headV.y = 0;
             headV -= enviromentReference.transform.forward * (enviromentReference.transform.position.z);
             headV.y += enviromentReference.transform.position.y; */
-            Debug.Log(headV);
+            headPos = headV;
+            //Debug.Log(headV);
             x2 = headReference.transform.position.x;
             y2 = headReference.transform.position.y;
             z2 = headReference.transform.position.z;
