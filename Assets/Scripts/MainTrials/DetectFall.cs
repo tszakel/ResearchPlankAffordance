@@ -22,8 +22,10 @@ public class DetectFall : MonoBehaviour
     public GameObject VRCamera,City,Instructions,actionPrompt,respawnLeftTrigger,respawnRightTrigger; 
     private TextMeshProUGUI alterInstructions;
 
-    Vector3 leftDetect;
-    Vector3 rightDetect;
+   /*  Vector3 leftDetect;
+    Vector3 rightDetect; */
+
+
 
     private Renderer rend;
     
@@ -33,13 +35,22 @@ public class DetectFall : MonoBehaviour
     {
         rend = GetComponent<Renderer>();
         rend.enabled = true;
+
+        //VRCamera.transform.position = RotateWithUser.headV;
+        //VRCamera.transform.rotation = RotateWithUser.headQ;
         
-        HMDTracker = VRCamera.transform.position.z;
-        plankStart = GetComponent<Renderer>().bounds.min.z /* + 5 */;
-        plankEnd = GetComponent<Renderer>().bounds.max.z;
+        /* HMDTracker = VRCamera.transform.position.z;
+        plankStart = GetComponent<Renderer>().bounds.min.z + 5; // old way
+        plankEnd = GetComponent<Renderer>().bounds.max.z; */
+
+        HMDTracker = RotateWithUser.headPos.x;
+        //plankStart = GetComponent<Renderer>().bounds.min.z + 5; // old way
+        //plankEnd = GetComponent<Renderer>().bounds.max.z;
         
-        Debug.Log("start " + plankStart);
-        Debug.Log("end " + plankEnd);
+        Debug.Log("Start head pos " + HMDTracker);
+
+        //Debug.Log("start " + plankStart);
+        //Debug.Log("end " + plankEnd);
 
         alterInstructions = Instructions.GetComponent<TextMeshProUGUI>();
     }
@@ -47,31 +58,25 @@ public class DetectFall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        leftDetect = respawnLeftTrigger.transform.position;
+        /* leftDetect = respawnLeftTrigger.transform.position;
         leftDetect.x = HMDTracker - PlankChange.plankExtent - bodyWiggleRoom;
         respawnLeftTrigger.transform.position = leftDetect;
 
         rightDetect = respawnRightTrigger.transform.position;
         rightDetect.x = HMDTracker + PlankChange.plankExtent + bodyWiggleRoom;
-        respawnRightTrigger.transform.position = rightDetect;
+        respawnRightTrigger.transform.position = rightDetect; */
+
         
         lateralDifference = Mathf.Abs((0 - VRCamera.transform.position.x) + bodyWiggleRoom);
         //Debug.Log(lateralDifference);
 
-        HMDTracker = VRCamera.transform.position.z;
-        Debug.Log(PlankChange2.startToMonitor);
+       // HMDTracker = VRCamera.transform.position.z;
+        //Debug.Log(RotateWithUser.headPos);
 
         if(PlankChange2.startToMonitor){
             Fallen();
             monitorSuccessfulTrial(HMDTracker);
         }
-
-        /* if(SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
-            Debug.Log("Squeezing");
-        }else{
-            Debug.Log("Not Squeezing");
-        } */
-        
 
     }
 
