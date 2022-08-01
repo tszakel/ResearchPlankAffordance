@@ -44,6 +44,8 @@ public class PlankChange2 : MonoBehaviour
         curPlankWidth = minPlankWidth;
         plankExtent = Math.Abs(curPlankWidth / 2.0f);
 
+        //Debug.log
+
         temp = transform.localScale;
         temp.x = minPlankWidth;
         transform.localScale = temp;
@@ -58,7 +60,6 @@ public class PlankChange2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if(blockNumber > maxTrials){
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
@@ -73,8 +74,10 @@ public class PlankChange2 : MonoBehaviour
             if(blockNumber%2 == 1 && transform.localScale.x < maxPlankWidth){
                 temp = transform.localScale;
                 temp.x += 0.01f;
+                curPlankWidth +=0.01f;
                 //temp.x = (float)Math.Round(temp.x, 3);
                 transform.localScale = temp;
+                plankExtent = Math.Abs(curPlankWidth / 2.0f);
             }
             if(blockNumber%2 == 1 && transform.localScale.x >= maxPlankWidth){
                 alterLimitReached.text = "You have reached the maximum plank width.";
@@ -86,6 +89,8 @@ public class PlankChange2 : MonoBehaviour
             if(blockNumber%2 == 0 && transform.localScale.x > minPlankWidth){
                 temp = transform.localScale;
                 temp.x -= 0.01f;
+                curPlankWidth -=0.01f;
+                plankExtent = Math.Abs(curPlankWidth / 2.0f);
                 //temp.x = (float)Math.Round(temp.x, 3);
                 transform.localScale = temp;
             }
@@ -120,10 +125,10 @@ public class PlankChange2 : MonoBehaviour
         }else{
             YesNoQuestion.SetActive(false);
             if(blockNumber%2 == 1){
-                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Squeeze ... when done";
+                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Squeeze when done";
                 scalePrompt.SetActive(true);
             }else{
-                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Squeeze ... when done";
+                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Squeeze when done";
                 scalePrompt.SetActive(true);
             }
             if(!scaleCoroutineStarted){
@@ -213,6 +218,8 @@ public class PlankChange2 : MonoBehaviour
         if(blockNumber%2 == 0){
             temp = transform.localScale;
             temp.x = minPlankWidth;
+            curPlankWidth = minPlankWidth;
+            plankExtent = Math.Abs(curPlankWidth / 2.0f);
             transform.localScale = temp;
             ++blockNumber;
 
@@ -220,6 +227,8 @@ public class PlankChange2 : MonoBehaviour
         }else{
             temp = transform.localScale;
             temp.x = maxPlankWidth;
+            curPlankWidth = maxPlankWidth;
+            plankExtent = Math.Abs(curPlankWidth / 2.0f);
             transform.localScale = temp;
             ++blockNumber;
 

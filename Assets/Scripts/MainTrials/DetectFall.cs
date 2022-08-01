@@ -14,18 +14,13 @@ public class DetectFall : MonoBehaviour
     
     public static bool hasFallen, successfulTrial;
 
-    private float bodyWiggleRoom = 0.381f;
+    private float bodyWiggleRoom = 0.5f;
 
     private float HMDTracker, userStartLateral;
     private float lateralDifference = 0.0f;
 
     public GameObject VRCamera,City,Instructions,actionPrompt,respawnLeftTrigger,respawnRightTrigger; 
     private TextMeshProUGUI alterInstructions;
-
-   /*Vector3 leftDetect;
-    Vector3 rightDetect; */
-
-
 
     private Renderer rend;
     
@@ -42,36 +37,27 @@ public class DetectFall : MonoBehaviour
 
         HMDTracker = RotateWithUser.headPos.x;
         plankStart = RotateWithUser.headPos.x - 1; 
-        plankEnd = RotateWithUser.headPos.x - 5;
+        plankEnd = RotateWithUser.headPos.x - 4.65f;
         userStartLateral = RotateWithUser.headPos.z;
         
-        Debug.Log("user start " + HMDTracker);
-        Debug.Log("plank start " + plankStart);
-        Debug.Log("plank end " + plankEnd);
-
-        //Debug.Log("start " + plankStart);
-        //Debug.Log("end " + plankEnd);
+        Debug.Log("User start " + HMDTracker);
+        Debug.Log("Plank start " + plankStart);
+        Debug.Log("Plank end " + plankEnd);
 
         alterInstructions = Instructions.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
     void Update()
-    {
-        /* leftDetect = respawnLeftTrigger.transform.position;
-        leftDetect.x = HMDTracker - PlankChange.plankExtent - bodyWiggleRoom;
-        respawnLeftTrigger.transform.position = leftDetect;
-
-        rightDetect = respawnRightTrigger.transform.position;
-        rightDetect.x = HMDTracker + PlankChange.plankExtent + bodyWiggleRoom;
-        respawnRightTrigger.transform.position = rightDetect; */
-
-        
+    {   
         lateralDifference = Mathf.Abs((userStartLateral - RotateWithUser.headPos.z) + bodyWiggleRoom);
-        Debug.Log(lateralDifference);
+        //Debug.Log(lateralDifference);
 
         HMDTracker = RotateWithUser.headPos.x;
-        //Debug.Log(RotateWithUser.headPos);
+        //Debug.Log(HMDTracker);
+
+        //Debug.Log("Extent: " + PlankChange2.plankExtent + " | wiggle room: " + bodyWiggleRoom);
+        //Debug.Log("Extent: " +  (PlankChange2.plankExtent + bodyWiggleRoom) + " | lateral Diff: " + lateralDifference);
 
         if(PlankChange2.startToMonitor){
             Fallen();
@@ -81,7 +67,7 @@ public class DetectFall : MonoBehaviour
     }
 
     void monitorSuccessfulTrial(float userCenter) {
-        if(userCenter >= plankEnd){
+        if(userCenter <= plankEnd){
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
             City.SetActive(false);
@@ -95,7 +81,13 @@ public class DetectFall : MonoBehaviour
     }
     
     void Fallen() {
-        if ((lateralDifference > PlankChange2.plankExtent + bodyWiggleRoom) &&  (VRCamera.transform.position.z > plankStart)){
+        if ((lateralDifference > (PlankChange2.plankExtent + bodyWiggleRoom)) &&  (HMDTracker < plankStart)){
+
+           /*  Debug.Log("User Pos: " + HMDTracker);
+            Debug.Log("Plank Start: " + plankStart);
+            Debug.Log("Lateral Difference: " + lateralDifference);
+            Debug.Log("Available Extent: " + PlankChange2.plankExtent + bodyWiggleRoom); */
+
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
             City.SetActive(false);

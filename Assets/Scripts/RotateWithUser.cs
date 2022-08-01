@@ -28,7 +28,7 @@ public class RotateWithUser : MonoBehaviour
         environmentV = enviromentReference.transform.position;
         environmentQ = enviromentReference.transform.rotation;
         plankEnd = plank.GetComponent<Renderer>().bounds.max.z;
-        Debug.Log("Starting head position: " + headV);
+        //Debug.Log("Starting head position: " + headV);
         plankStartingV = new Vector3(0, plank.transform.position.y, plankEnd);
 
         x1 = headReference.transform.position.x;
@@ -68,7 +68,7 @@ public class RotateWithUser : MonoBehaviour
                 updateStopper = true;
             }
             headPos = headV;
-            Debug.Log("Starting head position: " + headV);
+            //Debug.Log("Starting head position: " + headV);
         }
 
         if (SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any))
