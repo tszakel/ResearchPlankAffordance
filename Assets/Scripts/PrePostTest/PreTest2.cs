@@ -115,10 +115,10 @@ public class PreTest2 : MonoBehaviour
         }else{
             YesNoQuestion.SetActive(false);
             if(blockNumber%2 == 1){
-                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Squeeze ... when done";
+                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Squeeze when done";
                 scalePrompt.SetActive(true);
             }else{
-                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Squeeze ... when done";
+                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Squeeze when done";
                 scalePrompt.SetActive(true);
             }
             if(!scaleCoroutineStarted){
@@ -169,14 +169,14 @@ public class PreTest2 : MonoBehaviour
         yield return new WaitForSeconds(5);
 
         if(blockNumber%2 == 0){
-            recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);
+            //recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);
 
             temp = transform.localScale;
             temp.x = minPlankWidth;
             transform.localScale = temp;
             alterYesNo.text = "Is this a width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
         }else{
-            recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);         
+            //recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);         
 
             temp = transform.localScale;
             temp.x = maxPlankWidth;

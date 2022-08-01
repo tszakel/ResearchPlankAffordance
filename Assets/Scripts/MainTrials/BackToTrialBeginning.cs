@@ -4,18 +4,27 @@ using UnityEngine;
 
 public class BackToTrialBeginning : MonoBehaviour
 {
-    /* [SerializeField] private Transform player;
+    [SerializeField] private Transform player;
     [SerializeField] private Transform respawnPoint;
 
-    private void OnTriggerEnter(Collider other){
-      /*   if(other.CompareTag("Player"/* "MainCamera"/)){
-            //player.transform.position = respawnPoint.transform.position;
-            player.transform.position = respawnPoint.transform.position;
-            Physics.SyncTransforms();
-        } */
-    //} 
+    /* private void OnTriggerEnter(Collider other){
+         if(other.CompareTag("Player")){
+            Debug.Log("Extent: " +  (PlankChange2.plankExtent + bodyWiggleRoom) + " | lateral Diff: " + lateralDifference);
 
-    private Vector3 tempPos;
+            VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+            VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
+            City.SetActive(false);
+            rend.enabled = false;
+            alterInstructions.text = "You have fallen.\n\n Wait to be guided and press the trigger when you're ready to begin the next trial.";
+            actionPrompt.SetActive(false);
+            Instructions.SetActive(true);
+            
+
+            hasFallen = true;
+        } 
+    }  */
+
+    /* private Vector3 tempPos;
     Vector3 startPos;
     // Start is called before the first frame update
     void Start()
@@ -37,5 +46,5 @@ public class BackToTrialBeginning : MonoBehaviour
             Debug.Log("Position after change: " + this.transform.position);
         }
         
-    }
+    } */
 }

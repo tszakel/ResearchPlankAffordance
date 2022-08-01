@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using Valve.VR;
-using TMPro;
+using TMPro; 
+using System; 
 
 
 
@@ -14,7 +15,7 @@ public class DetectFall : MonoBehaviour
     
     public static bool hasFallen, successfulTrial;
 
-    private float bodyWiggleRoom = 0.5f;
+    private float bodyWiggleRoom = 0.165f;
 
     private float HMDTracker, userStartLateral;
     private float lateralDifference = 0.0f;
@@ -30,15 +31,13 @@ public class DetectFall : MonoBehaviour
     {
         rend = GetComponent<Renderer>();
         rend.enabled = true;
-        
-        /* HMDTracker = VRCamera.transform.position.z;
-        plankStart = GetComponent<Renderer>().bounds.min.z + 5; // old way
-        plankEnd = GetComponent<Renderer>().bounds.max.z; */
 
         HMDTracker = RotateWithUser.headPos.x;
         plankStart = RotateWithUser.headPos.x - 1; 
         plankEnd = RotateWithUser.headPos.x - 4.65f;
         userStartLateral = RotateWithUser.headPos.z;
+
+        //HMDTracker = RotateWithUser.headPos.x;
         
         Debug.Log("User start " + HMDTracker);
         Debug.Log("Plank start " + plankStart);
@@ -50,9 +49,9 @@ public class DetectFall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        lateralDifference = Mathf.Abs((userStartLateral - RotateWithUser.headPos.z) + bodyWiggleRoom);
-        //Debug.Log(lateralDifference);
-
+        lateralDifference = Mathf.Abs((userStartLateral - RotateWithUser.headPos.z) /* + bodyWiggleRoom */);
+        lateralDifference = (float)Math.Round(lateralDifference, 3);
+        Debug.Log("Extent: " +  (PlankChange2.plankExtent + bodyWiggleRoom) + " | lateral Diff: " + lateralDifference);
         HMDTracker = RotateWithUser.headPos.x;
         //Debug.Log(HMDTracker);
 
@@ -87,6 +86,8 @@ public class DetectFall : MonoBehaviour
             Debug.Log("Plank Start: " + plankStart);
             Debug.Log("Lateral Difference: " + lateralDifference);
             Debug.Log("Available Extent: " + PlankChange2.plankExtent + bodyWiggleRoom); */
+
+            Debug.Log("Extent: " +  (PlankChange2.plankExtent + bodyWiggleRoom) + " | lateral Diff: " + lateralDifference);
 
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;

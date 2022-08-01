@@ -32,6 +32,7 @@ public class PlankChange2 : MonoBehaviour
 
     private Renderer rend; //change to public
     private DetectFall DetectFallScript;
+    //public RotateWithUser RotateWithUserScript;
 
 
 
@@ -73,14 +74,17 @@ public class PlankChange2 : MonoBehaviour
         if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
             if(blockNumber%2 == 1 && transform.localScale.x < maxPlankWidth){
                 temp = transform.localScale;
-                temp.x += 0.01f;
-                curPlankWidth +=0.01f;
+                temp.x += 0.005f;
+                curPlankWidth +=0.005f;
                 //temp.x = (float)Math.Round(temp.x, 3);
                 transform.localScale = temp;
                 plankExtent = Math.Abs(curPlankWidth / 2.0f);
             }
             if(blockNumber%2 == 1 && transform.localScale.x >= maxPlankWidth){
                 alterLimitReached.text = "You have reached the maximum plank width.";
+                scaleActive = false;
+                scaleCoroutineStarted = false;
+                responseCoroutineStarted = false;
                 if(!limitReachedCoroutineStarted){
                     StartCoroutine(plankLimitReached());
                 }
@@ -88,14 +92,17 @@ public class PlankChange2 : MonoBehaviour
 
             if(blockNumber%2 == 0 && transform.localScale.x > minPlankWidth){
                 temp = transform.localScale;
-                temp.x -= 0.01f;
-                curPlankWidth -=0.01f;
+                temp.x -= 0.005f;
+                curPlankWidth -=0.005f;
                 plankExtent = Math.Abs(curPlankWidth / 2.0f);
                 //temp.x = (float)Math.Round(temp.x, 3);
                 transform.localScale = temp;
             }
             if(blockNumber%2 == 0 && transform.localScale.x <= minPlankWidth){
                 alterLimitReached.text = "You have reached the minimum plank width.";
+                scaleActive = false;
+                scaleCoroutineStarted = false;
+                responseCoroutineStarted = false;
                 if(!limitReachedCoroutineStarted){
                     StartCoroutine(plankLimitReached());
                 }
@@ -114,6 +121,9 @@ public class PlankChange2 : MonoBehaviour
     IEnumerator waitForResponse(){
         Debug.Log("Waiting for response...");
 
+        scalePrompt.SetActive(false);
+        actionPrompt.SetActive(false);
+        reachedLimitPrompt.SetActive(false);
         responseCoroutineStarted = true;
         yield return new WaitUntil(() => SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any) || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) ||
                                      Input.GetKeyDown("n") == true || Input.GetKeyDown("y") == true);
@@ -153,8 +163,9 @@ public class PlankChange2 : MonoBehaviour
         scalePrompt.SetActive(false);
         reachedLimitPrompt.SetActive(true);
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
 
+        reachedLimitPrompt.SetActive(false);
         if(!actionCoroutineStarted){
             StartCoroutine(actionStandBy());
         }
@@ -164,6 +175,7 @@ public class PlankChange2 : MonoBehaviour
 
      IEnumerator actionStandBy(){
         Debug.Log("Waiting for trial result...");
+        scalePrompt.SetActive(false);
         reachedLimitPrompt.SetActive(false);
         YesNoQuestion.SetActive(false);
         actionPrompt.SetActive(true);
@@ -209,6 +221,7 @@ public class PlankChange2 : MonoBehaviour
     IEnumerator GenerateNext(){
         generateNextCoroutineStarted = true;
 
+        reachedLimitPrompt.SetActive(false);
         BufferText.SetActive(true);
         startToMonitor = false;
 
@@ -235,11 +248,14 @@ public class PlankChange2 : MonoBehaviour
             alterYesNo.text = "Is this the *SMALLEST* width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
         }
 
+        //RotateWithUserScript.updateEnvironment();
+
         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
         City.SetActive(true);
         rend.enabled = true;
 
         BufferText.SetActive(false);
+        actionPrompt.SetActive(false);
         YesNoQuestion.SetActive(true);
         DetectFallScript.enabled = true;
 

@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 437039379}
   - component: {fileID: 437039378}
   m_Layer: 5
-  m_Name: Intro Text
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,9 +316,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "This experiment will test your \nabilty to judge plank widths \nand whether
-    or not you can \nsucessfully cross these gaps. \n\nWhen ready, press the trigger
-    to start."
+  m_text: 'You have completed the pre-test.
+
+
+    Press the trigger when ready to
+
+    start
+    the next section.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0c91d0325c2e047c281614d5ffe90157, type: 2}
   m_sharedMaterial: {fileID: 2196240344078985662, guid: 0c91d0325c2e047c281614d5ffe90157,

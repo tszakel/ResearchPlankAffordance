@@ -15,7 +15,7 @@ public class RotateWithUser : MonoBehaviour
 
     public static Vector3 headPos;
 
-    float x1,x2,y1,y2,z1,z2;
+    private float x1,x2,y1,y2,z1,z2;
     // Start is called before the first frame update
     void Start()
     {
@@ -86,22 +86,29 @@ public class RotateWithUser : MonoBehaviour
 
         if (trialStarted)
         {
-            //headV += headReference.transform.position;
             x1 = headReference.transform.position.x;
             y1 = headReference.transform.position.y;
             z1 = headReference.transform.position.z;
             headV.x += x1-x2;
             headV.y += y1-y2;
             headV.z += z1-z2;
-            /* headV.y = 0;
-            headV -= enviromentReference.transform.forward * (enviromentReference.transform.position.z);
-            headV.y += enviromentReference.transform.position.y; */
             headPos = headV;
-            //Debug.Log(headV);
             x2 = headReference.transform.position.x;
             y2 = headReference.transform.position.y;
             z2 = headReference.transform.position.z;
         }
+    }
 
+    public void updateEnvironment(){
+        headV = headReference.transform.position;
+        headV.y = 0;
+        headQ = headReference.transform.rotation;
+        headQ.x = 0;
+        headQ.z = 0;
+        headQ *= environmentQ;
+        enviromentReference.transform.rotation = headQ;
+        headV -= enviromentReference.transform.forward * (enviromentReference.transform.position.z);
+        headV.y += enviromentReference.transform.position.y;
+        enviromentReference.transform.position = headV;
     }
 }
