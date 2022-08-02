@@ -6,7 +6,7 @@ using Valve.VR;
 public class RotateWithUser : MonoBehaviour
 {
     //reference of head and reference of enviroment and and the whole camera rig
-    public GameObject headReference, enviromentReference, rigReference, plank, calibrateScenePrompt, VRCamera, City;
+    public GameObject headReference, enviromentReference, rigReference, plank, calibrateScenePrompt, VRCamera, City,City2,City3,City4,City5,City6;
     private Vector3 headV, environmentV, plankStartingV;
     private Quaternion headQ, environmentQ;
     private bool updateStopper, updateStopperGrip, trialStarted;
@@ -22,6 +22,11 @@ public class RotateWithUser : MonoBehaviour
         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
         VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
         City.SetActive(false);
+        City2.SetActive(false);
+        City3.SetActive(false);
+        City4.SetActive(false);
+        City5.SetActive(false);
+        City6.SetActive(false);
         plank.SetActive(false);
         calibrateScenePrompt.SetActive(true);
 
@@ -77,6 +82,11 @@ public class RotateWithUser : MonoBehaviour
             {
                 VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
                 City.SetActive(true);
+                City2.SetActive(true);
+                City3.SetActive(true);
+                City4.SetActive(true);
+                City5.SetActive(true);
+                City6.SetActive(true);
                 plank.SetActive(true);
                 calibrateScenePrompt.SetActive(false);
                 updateStopperGrip = false;

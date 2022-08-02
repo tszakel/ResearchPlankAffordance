@@ -20,7 +20,7 @@ public class DetectFall : MonoBehaviour
     private float HMDTracker, userStartLateral;
     private float lateralDifference = 0.0f;
 
-    public GameObject VRCamera,City,Instructions,actionPrompt,respawnLeftTrigger,respawnRightTrigger; 
+    public GameObject VRCamera,City,City2,City3,City4,City5,City6,Instructions,actionPrompt,respawnLeftTrigger,respawnRightTrigger; 
     private TextMeshProUGUI alterInstructions;
 
     private Renderer rend;
@@ -51,7 +51,7 @@ public class DetectFall : MonoBehaviour
     {   
         lateralDifference = Mathf.Abs((userStartLateral - RotateWithUser.headPos.z) /* + bodyWiggleRoom */);
         lateralDifference = (float)Math.Round(lateralDifference, 3);
-        Debug.Log("Extent: " +  (PlankChange2.plankExtent + bodyWiggleRoom) + " | lateral Diff: " + lateralDifference);
+        //Debug.Log("Extent: " +  (PlankChange2.plankExtent + bodyWiggleRoom) + " | lateral Diff: " + lateralDifference);
         HMDTracker = RotateWithUser.headPos.x;
         //Debug.Log(HMDTracker);
 
@@ -70,6 +70,11 @@ public class DetectFall : MonoBehaviour
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
             City.SetActive(false);
+            City2.SetActive(false);
+            City3.SetActive(false);
+            City4.SetActive(false);
+            City5.SetActive(false);
+            City6.SetActive(false);
             rend.enabled = false;
             alterInstructions.text = "You have successfully crossed.\n\n Wait to be guided back and press the trigger when you're ready to begin the next trial.";
             actionPrompt.SetActive(false);
@@ -87,11 +92,16 @@ public class DetectFall : MonoBehaviour
             Debug.Log("Lateral Difference: " + lateralDifference);
             Debug.Log("Available Extent: " + PlankChange2.plankExtent + bodyWiggleRoom); */
 
-            Debug.Log("Extent: " +  (PlankChange2.plankExtent + bodyWiggleRoom) + " | lateral Diff: " + lateralDifference);
+            //Debug.Log("Extent: " +  (PlankChange2.plankExtent + bodyWiggleRoom) + " | lateral Diff: " + lateralDifference);
 
             VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             VRCamera.GetComponent<Camera>().backgroundColor = Color.black;
             City.SetActive(false);
+            City2.SetActive(false);
+            City3.SetActive(false);
+            City4.SetActive(false);
+            City5.SetActive(false);
+            City6.SetActive(false);
             rend.enabled = false;
             alterInstructions.text = "You have fallen.\n\n Wait to be guided and press the trigger when you're ready to begin the next trial.";
             actionPrompt.SetActive(false);

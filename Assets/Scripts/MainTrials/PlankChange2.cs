@@ -17,7 +17,7 @@ public class PlankChange2 : MonoBehaviour
     public static float plankExtent;
 
 
-    public GameObject scalePrompt, reachedLimitPrompt, YesNoQuestion, BufferText, actionPrompt, VRCamera, City, User, Instructions;
+    public GameObject scalePrompt, reachedLimitPrompt, YesNoQuestion, BufferText, actionPrompt, VRCamera, City,City2,City3,City4,City5,City6, User, Instructions;
     private TextMeshProUGUI alterYesNo, alterLimitReached, alterScalePrompt, alterInstructions;
 
     private int blockNumber = 1;
@@ -45,8 +45,6 @@ public class PlankChange2 : MonoBehaviour
         curPlankWidth = minPlankWidth;
         plankExtent = Math.Abs(curPlankWidth / 2.0f);
 
-        //Debug.log
-
         temp = transform.localScale;
         temp.x = minPlankWidth;
         transform.localScale = temp;
@@ -71,7 +69,43 @@ public class PlankChange2 : MonoBehaviour
             }
         }
 
-        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
+        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.SnapTurnLeft.GetState(SteamVR_Input_Sources.Any)){
+            if((transform.localScale.x >= minPlankWidth) && (transform.localScale.x <= maxPlankWidth)){
+                //Debug.Log("Scaling down");
+                temp = transform.localScale;
+                temp.x -= 0.005f;
+                curPlankWidth -=0.005f;
+                plankExtent = Math.Abs(curPlankWidth / 2.0f);
+                transform.localScale = temp;
+            }
+            if(transform.localScale.x <= minPlankWidth){
+                alterLimitReached.text = "You have reached the minimum plank width. Please stand by.";
+                if(!limitReachedCoroutineStarted){
+                    StartCoroutine(plankLimitReached());
+                }
+            }
+        }
+
+        if(scaleActive && Input.GetKey("u") || scaleActive && SteamVR_Actions._default.SnapTurnRight.GetState(SteamVR_Input_Sources.Any)){
+            if((transform.localScale.x >= minPlankWidth) && (transform.localScale.x <= maxPlankWidth)){
+                //Debug.Log("Scaling up");
+                temp = transform.localScale;
+                temp.x +=0.005f;
+                curPlankWidth +=0.005f;
+                plankExtent = Math.Abs(curPlankWidth / 2.0f);
+                transform.localScale = temp;
+            }
+            if(transform.localScale.x >= maxPlankWidth){
+                alterLimitReached.text = "You have reached the maximum plank width. Please stand by.";
+                if(!limitReachedCoroutineStarted){
+                    StartCoroutine(plankLimitReached());
+                }
+            }
+        }
+
+        
+
+        /* if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
             if(blockNumber%2 == 1 && transform.localScale.x < maxPlankWidth){
                 temp = transform.localScale;
                 temp.x += 0.005f;
@@ -107,7 +141,7 @@ public class PlankChange2 : MonoBehaviour
                     StartCoroutine(plankLimitReached());
                 }
             }
-        }
+        } */
 
         if(Input.GetKeyDown("d") && scaleActive || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) && scaleActive){
             scaleActive = false;
@@ -185,7 +219,7 @@ public class PlankChange2 : MonoBehaviour
         yield return new WaitUntil(() => DetectFall.hasFallen == true || DetectFall.successfulTrial == true);
 
         if(DetectFall.hasFallen == true){
-            //recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
+            recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
 
             DetectFall.hasFallen = false;
             DetectFallScript.enabled = false;
@@ -195,7 +229,7 @@ public class PlankChange2 : MonoBehaviour
             }
 
         }else if(DetectFall.successfulTrial == true){
-            //recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
+            recordtocsv.recordMainTrialData(userName,blockNumber,transform.localScale.x,DetectFall.hasFallen,skyOrGround);
 
             DetectFall.successfulTrial = false;
             DetectFallScript.enabled = false;
@@ -252,6 +286,11 @@ public class PlankChange2 : MonoBehaviour
 
         VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
         City.SetActive(true);
+        City2.SetActive(true);
+        City3.SetActive(true);
+        City4.SetActive(true);
+        City5.SetActive(true);
+        City6.SetActive(true);
         rend.enabled = true;
 
         BufferText.SetActive(false);

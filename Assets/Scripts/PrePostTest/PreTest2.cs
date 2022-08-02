@@ -44,14 +44,11 @@ public class PreTest2 : MonoBehaviour
         alterScalePrompt = scalePrompt.GetComponent<TextMeshProUGUI>();
 
         YesNoQuestion.SetActive(true);
-
-        //Debug.Log("user name: " + userName + ", sky/ground: " + skyOrGround);
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if(blockNumber > maxTrials){
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
@@ -62,27 +59,29 @@ public class PreTest2 : MonoBehaviour
             }
         }
 
-        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
-            if(blockNumber%2 == 1 && transform.localScale.x < maxPlankWidth){
+        if(scaleActive && Input.GetKey("u") || scaleActive && SteamVR_Actions._default.SnapTurnRight.GetState(SteamVR_Input_Sources.Any)){
+            if((transform.localScale.x >= minPlankWidth) && (transform.localScale.x <= maxPlankWidth)){
+                Debug.Log("Scaling up");
                 temp = transform.localScale;
                 temp.x += 0.01f;
-                //temp.x = (float)Math.Round(temp.x, 3);
                 transform.localScale = temp;
             }
-            if(blockNumber%2 == 1 && transform.localScale.x >= maxPlankWidth){
+            if(transform.localScale.x >= maxPlankWidth){
                 alterLimitReached.text = "You have reached the maximum plank width. Please stand by.";
                 if(!limitReachedCoroutineStarted){
                     StartCoroutine(plankLimitReached());
                 }
             }
+        }
 
-            if(blockNumber%2 == 0 && transform.localScale.x > minPlankWidth){
+        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.SnapTurnLeft.GetState(SteamVR_Input_Sources.Any)){
+            if((transform.localScale.x >= minPlankWidth) && (transform.localScale.x <= maxPlankWidth)){
+                Debug.Log("Scaling down");
                 temp = transform.localScale;
                 temp.x -= 0.01f;
-                //temp.x = (float)Math.Round(temp.x, 3);
                 transform.localScale = temp;
             }
-            if(blockNumber%2 == 0 && transform.localScale.x <= minPlankWidth){
+            if(transform.localScale.x <= minPlankWidth){
                 alterLimitReached.text = "You have reached the minimum plank width. Please stand by.";
                 if(!limitReachedCoroutineStarted){
                     StartCoroutine(plankLimitReached());
@@ -115,10 +114,10 @@ public class PreTest2 : MonoBehaviour
         }else{
             YesNoQuestion.SetActive(false);
             if(blockNumber%2 == 1){
-                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Squeeze when done";
+                alterScalePrompt.text = "Scale the width until you feel comfortable walking across.\n Hold right side of touchpad to go up an left to go down.\n Squeeze side buttons when done";
                 scalePrompt.SetActive(true);
             }else{
-                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Squeeze when done";
+                alterScalePrompt.text = "Scale the width until you *DONT* feel comfortable walking across.\n Hold right side of touchpad to go up an left to go down.\n Squeeze side buttons when done";
                 scalePrompt.SetActive(true);
             }
             if(!scaleCoroutineStarted){
@@ -139,9 +138,8 @@ public class PreTest2 : MonoBehaviour
     }
 
     IEnumerator plankLimitReached(){
-
-        recordWidth = transform.localScale.x;
-        Debug.Log("Width recorded: " + recordWidth);
+        /* recordWidth = transform.localScale.x;
+        Debug.Log("Width recorded: " + recordWidth); */
 
 
         limitReachedCoroutineStarted = true;
@@ -169,14 +167,14 @@ public class PreTest2 : MonoBehaviour
         yield return new WaitForSeconds(5);
 
         if(blockNumber%2 == 0){
-            //recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);
+            recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);
 
             temp = transform.localScale;
             temp.x = minPlankWidth;
             transform.localScale = temp;
             alterYesNo.text = "Is this a width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
         }else{
-            //recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);         
+            recordtocsv.recordPrePostData(userName,blockNumber,transform.localScale.x,skyOrGround,preOrPost);         
 
             temp = transform.localScale;
             temp.x = maxPlankWidth;
