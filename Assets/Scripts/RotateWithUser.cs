@@ -9,7 +9,7 @@ public class RotateWithUser : MonoBehaviour
     public GameObject headReference, enviromentReference, rigReference, plank, calibrateScenePrompt, VRCamera, City,City2,City3,City4,City5,City6;
     private Vector3 headV, environmentV, plankStartingV;
     private Quaternion headQ, environmentQ;
-    private bool updateStopper, updateStopperGrip, trialStarted;
+    private bool updateStopper, updateStopperGrip, trialStarted, calibrationComplete;
 
     private float plankEnd;
 
@@ -33,7 +33,6 @@ public class RotateWithUser : MonoBehaviour
         environmentV = enviromentReference.transform.position;
         environmentQ = enviromentReference.transform.rotation;
         plankEnd = plank.GetComponent<Renderer>().bounds.max.z;
-        //Debug.Log("Starting head position: " + headV);
         plankStartingV = new Vector3(0, plank.transform.position.y, plankEnd);
 
         x1 = headReference.transform.position.x;
@@ -71,14 +70,14 @@ public class RotateWithUser : MonoBehaviour
                 headV.y += enviromentReference.transform.position.y;
                 enviromentReference.transform.position = headV;
                 updateStopper = true;
+                calibrationComplete = true;
             }
             headPos = headV;
-            //Debug.Log("Starting head position: " + headV);
         }
 
         if (SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any))
         {
-            if (updateStopperGrip == false)
+            if (updateStopperGrip == false && calibrationComplete)
             {
                 VRCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
                 City.SetActive(true);
@@ -92,6 +91,7 @@ public class RotateWithUser : MonoBehaviour
                 updateStopperGrip = false;
                 trialStarted = true;
             }
+            calibrationComplete = false;
         }
 
         if (trialStarted)
@@ -109,7 +109,7 @@ public class RotateWithUser : MonoBehaviour
         }
     }
 
-    public void updateEnvironment(){
+    /* public void updateEnvironment(){
         headV = headReference.transform.position;
         headV.y = 0;
         headQ = headReference.transform.rotation;
@@ -120,5 +120,5 @@ public class RotateWithUser : MonoBehaviour
         headV -= enviromentReference.transform.forward * (enviromentReference.transform.position.z);
         headV.y += enviromentReference.transform.position.y;
         enviromentReference.transform.position = headV;
-    }
+    } */
 }

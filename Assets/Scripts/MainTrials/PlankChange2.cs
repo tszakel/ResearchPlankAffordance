@@ -270,7 +270,7 @@ public class PlankChange2 : MonoBehaviour
             transform.localScale = temp;
             ++blockNumber;
 
-            alterYesNo.text = "Is this a width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
+            alterYesNo.text = "Is this a width you feel comfortable walking across?\n Squeeze side buttons for 'Yes'\n Trigger for 'No'";
         }else{
             temp = transform.localScale;
             temp.x = maxPlankWidth;
@@ -279,7 +279,7 @@ public class PlankChange2 : MonoBehaviour
             transform.localScale = temp;
             ++blockNumber;
 
-            alterYesNo.text = "Is this the *SMALLEST* width you feel comfortable walking across?\n Squeeze for 'Yes'\n Trigger for 'No'";
+            alterYesNo.text = "Is this the *SMALLEST* width you feel comfortable walking across?\n Squeeze side buttons for 'Yes'\n Trigger for 'No'";
         }
 
         //RotateWithUserScript.updateEnvironment();
