@@ -34,7 +34,7 @@ public class DetectFall : MonoBehaviour
 
         HMDTracker = RotateWithUser.headPos.x;
         plankStart = RotateWithUser.headPos.x - 1; 
-        plankEnd = RotateWithUser.headPos.x - 4.65f;
+        plankEnd = RotateWithUser.headPos.x - 4.00f;
         userStartLateral = RotateWithUser.headPos.z;
 
         //HMDTracker = RotateWithUser.headPos.x;
