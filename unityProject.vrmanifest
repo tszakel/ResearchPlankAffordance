@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.researchvr2022.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "F:\\Tally\\ResearchPlankAffordance\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "E:\\Tally\\ResearchPlankAffordance\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "ResearchVR-2022 [Testing]"
