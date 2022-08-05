@@ -69,7 +69,7 @@ public class PlankChange2 : MonoBehaviour
             }
         }
 
-        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.SnapTurnLeft.GetState(SteamVR_Input_Sources.Any)){
+      /*   if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.SnapTurnLeft.GetState(SteamVR_Input_Sources.Any)){
             if((transform.localScale.x >= minPlankWidth) && (transform.localScale.x <= maxPlankWidth)){
                 //Debug.Log("Scaling down");
                 temp = transform.localScale;
@@ -101,11 +101,11 @@ public class PlankChange2 : MonoBehaviour
                     StartCoroutine(plankLimitReached());
                 }
             }
-        }
+        } */
 
         
 
-        /* if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
+        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
             if(blockNumber%2 == 1 && transform.localScale.x < maxPlankWidth){
                 temp = transform.localScale;
                 temp.x += 0.005f;
@@ -115,13 +115,18 @@ public class PlankChange2 : MonoBehaviour
                 plankExtent = Math.Abs(curPlankWidth / 2.0f);
             }
             if(blockNumber%2 == 1 && transform.localScale.x >= maxPlankWidth){
-                alterLimitReached.text = "You have reached the maximum plank width.";
+                temp = transform.localScale;
+                temp.x = minPlankWidth;
+                curPlankWidth = minPlankWidth;
+                plankExtent = Math.Abs(curPlankWidth / 2.0f);
+                transform.localScale = temp;
+                /* alterLimitReached.text = "You have reached the maximum plank width.";
                 scaleActive = false;
                 scaleCoroutineStarted = false;
                 responseCoroutineStarted = false;
                 if(!limitReachedCoroutineStarted){
                     StartCoroutine(plankLimitReached());
-                }
+                } */
             }
 
             if(blockNumber%2 == 0 && transform.localScale.x > minPlankWidth){
@@ -133,15 +138,20 @@ public class PlankChange2 : MonoBehaviour
                 transform.localScale = temp;
             }
             if(blockNumber%2 == 0 && transform.localScale.x <= minPlankWidth){
-                alterLimitReached.text = "You have reached the minimum plank width.";
+                temp = transform.localScale;
+                temp.x = maxPlankWidth;
+                curPlankWidth = maxPlankWidth;
+                plankExtent = Math.Abs(curPlankWidth / 2.0f);
+                transform.localScale = temp;
+                /* alterLimitReached.text = "You have reached the minimum plank width.";
                 scaleActive = false;
                 scaleCoroutineStarted = false;
                 responseCoroutineStarted = false;
                 if(!limitReachedCoroutineStarted){
                     StartCoroutine(plankLimitReached());
-                }
+                } */
             }
-        } */
+        } 
 
         if(Input.GetKeyDown("d") && scaleActive || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) && scaleActive){
             scaleActive = false;
@@ -169,10 +179,10 @@ public class PlankChange2 : MonoBehaviour
         }else{
             YesNoQuestion.SetActive(false);
             if(blockNumber%2 == 1){
-                alterScalePrompt.text = "Scale up the width until you feel comfortable walking across. Squeeze when done";
+                alterScalePrompt.text = "Scale the width until you feel comfortable walking across.\n Hold the trigger to scale the plank.\n Squeeze side buttons when done";
                 scalePrompt.SetActive(true);
             }else{
-                alterScalePrompt.text = "Scale down the width until you *DONT* feel comfortable walking across. Squeeze when done";
+                alterScalePrompt.text = "Scale the width until you *DONT* feel comfortable walking across.\n Hold the trigger to scale the plank.\n Squeeze side buttons when done";
                 scalePrompt.SetActive(true);
             }
             if(!scaleCoroutineStarted){

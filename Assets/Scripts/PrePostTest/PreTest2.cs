@@ -67,10 +67,9 @@ public class PreTest2 : MonoBehaviour
                 transform.localScale = temp;
             }
             if(transform.localScale.x >= maxPlankWidth){
-                alterLimitReached.text = "You have reached the maximum plank width. Please stand by.";
-                if(!limitReachedCoroutineStarted){
-                    StartCoroutine(plankLimitReached());
-                }
+                temp = transform.localScale;
+                temp.x = minPlankWidth;
+                transform.localScale = temp;
             }
         }
 
@@ -82,10 +81,9 @@ public class PreTest2 : MonoBehaviour
                 transform.localScale = temp;
             }
             if(transform.localScale.x <= minPlankWidth){
-                alterLimitReached.text = "You have reached the minimum plank width. Please stand by.";
-                if(!limitReachedCoroutineStarted){
-                    StartCoroutine(plankLimitReached());
-                }
+                temp = transform.localScale;
+                temp.x = minPlankWidth;
+                transform.localScale = temp;
             }
         }
 
@@ -114,10 +112,10 @@ public class PreTest2 : MonoBehaviour
         }else{
             YesNoQuestion.SetActive(false);
             if(blockNumber%2 == 1){
-                alterScalePrompt.text = "Scale the width until you feel comfortable walking across.\n Hold right side of touchpad to go up an left to go down.\n Squeeze side buttons when done";
+                alterScalePrompt.text = "Scale the width until you feel comfortable walking across.\n Hold the trigger to scale the plank.\n Squeeze side buttons when done";
                 scalePrompt.SetActive(true);
             }else{
-                alterScalePrompt.text = "Scale the width until you *DONT* feel comfortable walking across.\n Hold right side of touchpad to go up an left to go down.\n Squeeze side buttons when done";
+                alterScalePrompt.text = "Scale the width until you *DONT* feel comfortable walking across.\n Hold the trigger to scale the plank.\n Squeeze side buttons when done";
                 scalePrompt.SetActive(true);
             }
             if(!scaleCoroutineStarted){
@@ -138,10 +136,6 @@ public class PreTest2 : MonoBehaviour
     }
 
     IEnumerator plankLimitReached(){
-        /* recordWidth = transform.localScale.x;
-        Debug.Log("Width recorded: " + recordWidth); */
-
-
         limitReachedCoroutineStarted = true;
         scalePrompt.SetActive(false);
         reachedLimitPrompt.SetActive(true);
