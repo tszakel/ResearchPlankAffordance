@@ -59,7 +59,42 @@ public class PreTest2 : MonoBehaviour
             }
         }
 
-        if(scaleActive && Input.GetKey("u") || scaleActive && SteamVR_Actions._default.SnapTurnRight.GetState(SteamVR_Input_Sources.Any)){
+        if(scaleActive && Input.GetKey("s") || scaleActive && SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.Any)){
+            if(blockNumber%2 == 1 && transform.localScale.x < maxPlankWidth){
+                temp = transform.localScale;
+                temp.x += 0.005f;
+                
+                //temp.x = (float)Math.Round(temp.x, 3);
+                transform.localScale = temp;
+            }
+            if(blockNumber%2 == 1 && transform.localScale.x >= maxPlankWidth){
+                temp = transform.localScale;
+                temp.x = minPlankWidth;
+                transform.localScale = temp;
+           
+            }
+            if(blockNumber%2 == 0 && transform.localScale.x > minPlankWidth){
+                temp = transform.localScale;
+                temp.x -= 0.005f;
+
+                //temp.x = (float)Math.Round(temp.x, 3);
+                transform.localScale = temp;
+            }
+            if(blockNumber%2 == 0 && transform.localScale.x <= minPlankWidth){
+                temp = transform.localScale;
+                temp.x = maxPlankWidth;
+                transform.localScale = temp;
+                /* alterLimitReached.text = "You have reached the minimum plank width.";
+                scaleActive = false;
+                scaleCoroutineStarted = false;
+                responseCoroutineStarted = false;
+                if(!limitReachedCoroutineStarted){
+                    StartCoroutine(plankLimitReached());
+                } */
+            }
+        } 
+
+/*         if(scaleActive && Input.GetKey("u") || scaleActive && SteamVR_Actions._default.SnapTurnRight.GetState(SteamVR_Input_Sources.Any)){
             if((transform.localScale.x >= minPlankWidth) && (transform.localScale.x <= maxPlankWidth)){
                 Debug.Log("Scaling up");
                 temp = transform.localScale;
@@ -85,7 +120,7 @@ public class PreTest2 : MonoBehaviour
                 temp.x = minPlankWidth;
                 transform.localScale = temp;
             }
-        }
+        } */
 
         if(Input.GetKeyDown("d") && scaleActive || SteamVR_Actions._default.GrabGrip.GetStateDown(SteamVR_Input_Sources.Any) && scaleActive){
             scaleActive = false;
@@ -184,3 +219,4 @@ public class PreTest2 : MonoBehaviour
         generateNextCoroutineStarted = false;
     }
 }
+

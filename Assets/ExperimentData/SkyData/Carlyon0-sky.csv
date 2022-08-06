@@ -1,0 +1,17 @@
+PreTest,
+Block #, Plank Width
+1,0.3649998
+2,1
+MainTrials
+Block #, Plank Width, Fall?
+1,0.4399997, Yes
+MainTrials
+Block #, Plank Width, Fall?
+1,0.4149998, Yes
+2,1, Yes
+3,0.4599997, Yes
+4,1, Yes
+PostTest
+Block #, Plank Width
+1,0.2499999
+2,0.3200006
